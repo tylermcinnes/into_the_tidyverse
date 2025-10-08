@@ -1,0 +1,67 @@
+project:
+  type: website
+  render:
+    - "index.qmd"
+    - "about.qmd"
+    - "setup.qmd"
+    - "slides.qmd"
+    - "*.qmd"
+    - "slides/*.qmd"
+    - "practicals/*.qmd"
+
+#execute:
+#  freeze: auto  # re-render only when source changes
+
+
+website:
+  title: "r-intro"
+  site-url: https://r-training.pages.uni.lu/r-intro/
+  search:
+    location: navbar
+    type: overlay
+  navbar:
+    background: light
+    logo: img/logo-rfirsteps.png
+    left:
+      - file: index.qmd
+        text: "{{< fa house >}} Home"
+      - file: slides.qmd
+        text: "{{< fa graduation-cap >}} Lectures"
+      - file: practicals.qmd
+        text: "{{< fa desktop >}} Practicals"
+    right:
+      - file: setup.qmd
+        text: "{{< fa download >}} Setup tutorial"
+      - file: about.qmd
+        text: "{{< fa question-circle >}} About"
+  page-footer:
+    left: |
+      All content licensed under a {{< fa brands creative-commons >}}
+      {{< fa brands creative-commons-by >}} {{< fa brands creative-commons-nc >}} except for _source:_ statements.
+    center: "Copyright © [Université du Luxembourg](https://www.uni.lu/) 2023. All rights reserved."
+    right:
+      - icon: facebook
+        href: https://www.facebook.com/uni.lu
+      - icon: twitter
+        href: https://twitter.com/uni_lu
+      - icon: linkedin
+        href: https://www.linkedin.com/school/166650
+      - icon: instagram
+        href: https://www.instagram.com/uni.lu
+      - icon: youtube
+        href: https://www.youtube.com/user/luxuni
+    border: true
+
+format:
+  html:
+    page-layout: article
+    code-block-border-left: true
+    code-block-bg: true
+    code-copy: true
+    theme: cosmo
+    css: styles.css
+    fontsize: 1.2em
+    toc: true
+    lang: en
+    date-format: long
+    highlight-style: atom-one

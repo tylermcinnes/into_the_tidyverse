@@ -1,0 +1,811 @@
+---
+title: "Day 3: Importing and Visualising data"
+subtitle: "From raw data to presentable figure"
+format:
+  revealjs:
+    theme: dracula
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+    self-contained: true
+    embed-resources: true
+#    include-in-header: fontawesome.html
+
+---
+
+## Introduction
+
+In this session we will learn how to visualise data using the ggplot2 package.
+
+We will also cover importing data from common file types and viewing our data.
+
+Importing, data wrangling, and data visualisation constitute a large part of the work you will do in bioinformatics. Today's session will be a 'full workflow'. 
+
+## Learning Objectives
+
+- Learn how to import data in R with the readr package.
+- Be aware of other data types and functions associated with importing them.
+- Visualise data with ggplot2.
+- Become familiar with the `ggplot()` function format.
+- Practice writing tidy code.
+- Practice key skills from day 1 and day 2. 
+
+
+## Flat data
+
+"Flat" data is two dimensional: rows and columns. 
+
+The most common type of flat data file is the CSV (comma separated values). 
+
+Typically, the first row will contain column names and is referred to as the "header". Rows underneath the header contain data for each column, with columns separated by commas. 
+
+# 
+
+
+![The csv format](csv_example.png)
+
+
+
+## Importing with readr
+
+The readr package is part of the tidyverse.
+
+We can use the `read_csv()` function to import a csv file into R.
+
+```{r}
+#| echo: true
+
+
+library(tidyverse)
+
+penguin_data <- read_csv("../data/penguin_dataset.csv")
+```
+
+## It's your turn! {.slide-practical}
+
+
+
+When loading a new dataset we should view (a subset of) the data to familiarise ourselves. 
+
+### Exercise 1
+
+Use the following functions to view the penguin_data object. What is each function doing?
+
+`head()`, `tail()`, `glimpse()` 
+
+`class()`, `str()`, `summary()`
+
+#
+
+Three functions (`class()`, `str()`, and `summary()`) show important details about the object.
+
+`class()` shows the class attribute (*e.g.,* matrix, vector, tibble).
+
+`str()` shows the internal structure of the object. 
+
+We see part of each column (displayed as a row, similar to `glimpse()`) and information about the type of data stored in each column.
+
+# {.smaller}
+
+```{r}
+#| echo: true
+
+penguin_data %>% summary()
+```
+`summary()` evaluates each column and returns a summary depending on the type of data. For columns of numeric data we see mean, median, min, max and quartile information. 
+For character columns we see the length, and for logical columns we get a count of the number of TRUE and FALSE calls. 
+
+`summary()` is a useful function to understand the shape of your data.
+
+
+
+
+## Importing ugly data
+
+We will often encounter data that does not match our expectations for clean and tidy column names. 
+
+\
+
+```{r}
+#| echo: true
+
+
+uglyDuckling_data <- read_csv("../data/uglyDuckling_dataset.csv")
+uglyDuckling_data %>% colnames()
+```
+
+\
+
+snake_case, camelCase, **and** spaces??? Who made this object!? 
+
+## Renaming our ugly data
+
+```{r}
+#| echo: true
+#| 
+ugly_duckling_data <- uglyDuckling_data %>% rename(
+  species = "Species",
+  bill_length_mm = "billLengthMM",
+  flipper_length_mm = "Flipper_length_mm",
+  body_mass_g = "body mass g",
+  year = "Year"
+)
+
+ugly_duckling_data %>% colnames()
+```
+
+## What if I had a lot of columns?
+
+```{r}
+#| echo: true
+
+renv::install("janitor")
+library(janitor)
+
+uglyDuckling_data %>% janitor::clean_names()
+```
+
+The [janitor](https://sfirke.github.io/janitor/) R package has a lot of useful tools for cleaning data. 
+
+::: {.notes}
+
+It's functional to rename a small number of columns manually with `rename()`, but for many column names, use `clean_names()` from the janitor package.
+
+Remember, there are functions and packages for *so many* tasks - look for them.
+
+:::
+
+
+## Importing other data types
+
+Other functions exist for other data:
+
+`read_tsv()` for tab-delimited files. 
+
+`read_table()` for files where columns are separated by white space.
+
+`read_delim()` reads in files and guesses what the correct delimiter is. Use in cases where you don't know what the type of data coming in is. 
+
+
+## Data visualisation with ggplot 
+
+\
+
+- ggplot ("Grammar of Graphics"): work iteratively, build complexity. 
+
+- Focus on the format.
+
+- Demonstrates a key loop in data analysis: visualise your data, make adjustments, transform the data and visualise again. 
+
+
+## The ggplot format
+
+The ggplot format has **three parts**:
+
+Calling the *ggplot function and specifying the data*.
+
+*Mapping* the data: what data is displayed on the x and y axis.
+
+*Plotting the data* with a geom function - there are different geoms for different types of plots. 
+
+  - Note that the geom is a new function, which means we need to add a "+" to the previous line.
+
+## The ggplot format 
+
+```{r}
+#| eval: false
+#| echo: true
+
+ggplot(data = penguin_data, 
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  geom_point()
+```
+
+
+## The ggplot format
+
+```{r}
+#| echo: false
+
+ggplot(data = penguin_data, 
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  geom_point()
+```
+
+:::{.notes}
+Made the plot. Now what? What's the first thing we should do? 
+
+Whatever we are visualising we should *always* ask ourselves whether the data makes sense. What do we observe? Does it fit with our expectations and knowledge of the data?
+
+Do I expect bill length and depth to be correlated? Yes, broadly. 
+
+What else do you see? 
+
+Two, or three, groups: we already saw that there is a variable for island, and a variable for sex. 
+
+:::
+
+
+## It's your turn! {.slide-practical}
+
+### Exercise 2: clear your screen of previous code
+
+- From memory, create a new plot using
+
+  - `ggplot()`, where **data = penguin_data** and 
+
+  - **mapping = aes()** with: 
+  
+    - flipper_length_mm on the x axis, body_mass_g on the y axis
+    
+  - geom_point()
+  
+  - Remember that after the `ggplot()` function add a "+" before `geom_point()`
+
+## Solution
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = penguin_data,
+       mapping = aes(x = flipper_length_mm,
+                     y = body_mass_g)) +
+  geom_point()
+```
+
+
+
+
+## Improving the visualisation
+
+There are many steps we can take to improve our initial visualisation. 
+
+Here we will:
+
+- Add titles and labels
+
+- Improve the visual theme
+
+- Re-order the data to reduce cognitive load
+
+- Layer multiple geoms
+
+- Use geom arguments to change the look of the figure
+
+
+## Titles, labels and theme
+
+(Boring, but necessary)
+
+Add title and labels with the `labs()` function.
+
+Themes control the look of the plot window. Try `theme_minimal()`, `theme_dark()`, `theme_bw()`, and many others, for different looks. 
+
+\
+
+- Each new function is preceeded by a "+" on the previous line.
+
+## Titles, labels and theme
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  labs(title = "Bill length and depth in penguins",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)") +
+  theme_minimal() +
+  geom_point()
+```
+
+## Does sex, island or species explain the grouping in our bill dimension dataset? 
+
+```{r}
+#| fig-align: center
+
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  labs(title = "Bill length and depth in penguins",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)") +
+  theme_minimal() +
+  geom_point()
+```
+
+- How do we address this question? 
+
+## Mapping additional variables
+
+*mapping = aes()* is used to map a variable to an axis. 
+
+Variables can also be mapped to axes other than x and y:
+
+*Colour*, *size*, and *shape* are all axes we can map aesthetics to. 
+
+
+## Mapping additional variables
+
+```{r}
+#| echo: true
+#| eval: false
+
+
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = species)) +
+    labs(title = "Bill length and depth in penguins",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Species") +
+  theme_minimal() +
+  geom_point()
+```
+
+
+#
+
+```{r}
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = species)) +
+    labs(title = "Bill length and depth in penguins",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Species") +
+  theme_minimal() +
+  geom_point()
+```
+
+## Arguments for fine control
+
+Place arguments within the `geom_` you want to control, or within `theme()` for overall visuals.
+
+
+```{r}
+#| echo: true
+#| eval: false
+
+
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = species)) +
+    labs(title = "Bill length and depth in penguins",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Species") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  geom_point(size = 3,
+             alpha = 0.6)
+```
+
+
+#
+
+```{r}
+#| echo: false
+#| eval: true
+
+
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = species)) +
+    labs(title = "Bill length and depth in three species of penguin",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Species") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  geom_point(size = 3,
+             alpha = 0.6)
+```
+
+## Complex arguments for `geom_point()`
+
+```{r}
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = body_mass_g,
+                     shape = species)) +
+    labs(title = "Bill length and depth in three species of penguin",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Body mass") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  geom_point(size = 3,
+             alpha = 0.6)
+```
+
+
+## It's your turn! {.slide-practical}
+
+### Exercise 3
+
+How was this plot created? Use code from the previous slides and modify it yourself to duplicate this plot. 
+
+```{r}
+#| fig-align: center
+#| 
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = body_mass_g,
+                     shape = species)) +
+    labs(title = "Bill length and depth in three species of penguin",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Body mass") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  geom_point(size = 3,
+             alpha = 0.6)
+```
+
+## Solution and explanation
+
+```{r}
+#| fig-align: center
+#| echo: true
+#| 
+ggplot(data = penguin_data,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = body_mass_g,
+                     shape = species)) +
+    labs(title = "Bill length and depth in three species of penguin",
+       x = "Bill length (mm)",
+       y = "Bill depth (mm)",
+       colour = "Body mass") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold")) +
+  geom_point(size = 3,
+             alpha = 0.6)
+```
+
+::: {.notes}
+The key point here is that we are able to set aesthetics like colour and size to be variables, rather than fixed values. Think about how we can use this: *e.g.,* varing the size of a data point based on how many samples it represents, or varying the colour of a point based on how significantly different it is. You could, for example, colour all the points on a volcano plot based on p.values - however, I think the best use of this is to use a value like colour or shape to represent a value that is *not* represented by the x or y axis (so, colouring points on the volcano plot based on p.value is redundant). 
+
+Want to focus on the balance of **information density**: x, y, colour, size, and shape make five axes on which to convey information. However, this can be overwhelming. 
+
+Note that for aesthetics like colour, there are an almost endless variety of colours, so useful for numeric values. There are not so many shapes, so reserve shapes for discrete variables like sex, gender, or populations. 
+:::
+
+## Writing in a shorter format
+
+Because "data =" and "mapping =" are fundamental arguments, these can be shortened:
+
+```{r}
+#| echo: true
+#| eval: false
+
+ggplot(data = penguin_data,
+       mapping = aes(x = flipper_length_mm,
+                     y = flipper_depth_mm)) +
+      geom_point()
+
+```
+
+Is the same as:
+
+```{r}
+#| echo: true
+#| eval: false
+
+ggplot(penguin_data,
+       aes(x = flipper_length_mm,
+           y = flipper_depth_mm)) +
+  geom_point()
+```
+
+## Storing plot information
+
+We can save plot information as an object.
+
+Store mapping, theme, and other options.  
+
+Combine plot object with different geoms.
+
+```{r}
+#| echo: true
+#| 
+p_flipper_length <- ggplot(data = penguin_data,
+       mapping = aes(x = species,
+                     y = flipper_length_mm)) +
+    labs(title = "Flipper length of penguins",
+       x = "Species",
+       y = "Flipper length (mm)") +
+  theme_minimal() +
+  theme(plot.title = element_text(face = "bold"))
+```
+
+## Plot objects
+
+```{r}
+#| echo: true
+
+p_flipper_length
+```
+
+::: {.notes}
+This demonstrates the iterative process of ggplot. Currently our p_flipper_length object has the mapping aesthetics, theme, title information etc.,. 
+
+Then we can *layer* a geom over the top. This is key: we are going to layer geoms. 
+:::
+
+## Plot objects
+
+```{r}
+#| echo: true
+
+p_flipper_length +
+  geom_boxplot()
+```
+
+## Plot objects
+
+```{r}
+#| echo: true
+
+p_flipper_length +
+  geom_boxplot() +
+  geom_jitter()
+```
+
+::: {.notes}
+We have now layered geom_jitter on top of the boxplot. While the result is ugly, we can hopefully see the application. This is both a fundamentally important point for *understanding* ggplot and a practical skill: by layering geoms we can generate complex, detailed plots. 
+:::
+
+## Combining geoms
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| 
+p_flipper_length +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(size = 3,
+              width = 0.25,
+              alpha = 0.5)
+```
+
+## Adding variables as arguments from here
+
+I can map variables such as species or island to the data points in geom_jitter.
+
+Because these were not mapped in p_flipper_length, I have to use *mapping = aes()* to connect a variable to an aesthetic.
+
+```{r}
+#| echo: true
+#| eval: false
+#| 
+p_flipper_length +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(mapping = aes(colour = species),
+              size = 3,
+              width = 0.25,
+              alpha = 0.5)
+```
+
+#
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| 
+p_flipper_length +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(mapping = aes(colour = species),
+              size = 3,
+              width = 0.25,
+              alpha = 0.5)
+```
+
+Use `aes()` when specifying data that is coming from an object. 
+
+# Short break
+
+# Recap {.smaller}
+
+How do we import data?
+
+- `read_csv()`, `read_delim()`
+
+What functions can we use to initially look at our data?
+
+- `head()`, `tail()`, `glimpse()`, `class()`, `str()`, and `summary()`
+
+What are the three parts of a ggplot codeblock?
+
+- `ggplot()`, mapping = `aes()`, and `geom_X()`
+
+How do we control titles, labels, and legends?
+
+- `labs()` to add text, `theme()` to control text features
+
+
+## Facets and combining plots
+
+Using `facet_wrap()` and `facet_grid()` we can split data across multiple plots.
+
+  Patterns can become clearer when data is split. 
+
+\
+
+We can combine discrete plots together into a figure with the patchwork and cowplot libraries. 
+
+  Join data from multiple sources to tell a cohesive story.
+  
+
+## `facet_wrap()` and `facet_grid()`
+
+`facet_wrap()` splits data according to a single variable (*e.g.,* split samples by sex).
+
+`facet_grid()` splits data according to two variables (*e.g.,* split samples by age group and treatment group).
+
+## Preparing the data
+
+```{r}
+#| echo: true
+
+p_bm_fl <- ggplot(data = penguin_data,
+                  mapping = aes(x = body_mass_g,
+                                y = flipper_length_mm,
+                                colour = species))
+```
+
+
+## Example with `facet_wrap()`
+
+```{r}
+#| echo: true
+#| eval: false
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(~ island)
+```
+
+#
+
+```{r}
+#| echo: false
+#| fig-align: center
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(~ island)
+```
+
+## Example with `facet_grid()`
+
+```{r}
+#| echo: true
+#| eval: false
+
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(island ~ sex)           
+```
+
+#
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(sex ~ island)           
+```
+
+::: {.notes}
+It might be more interesting to actually use facet_wrap with island and species, and use colour (or shape) for sex. 
+:::
+
+
+## Combining plots into a single image
+
+Two packages, patchwork and cowplot, provide the ability to combine plots.
+
+```{r}
+#| echo: true
+
+renv::install("patchwork")
+
+library(patchwork)
+```
+
+## patchwork requires stored plots
+
+Make two plots.
+
+```{r}
+#| echo: true
+#| 
+p1 <- ggplot(penguin_data,
+              aes(x = bill_depth_mm,
+                  y = bill_length_mm,
+                  colour = species)) +
+      geom_point() +
+      labs(title = "Flipper length and depth",
+           x = "Bill depth (mm)",
+           y = "Bill length (mm)")
+
+p2 <- p_bm_fl +
+      labs(title = "Body mass and flipper length",
+           x = "Flipper length (mm)",
+           y = "Body mass (g)") +
+      geom_point() 
+```
+
+## Combining plots with patchwork
+
+Combine p1 and p2 with 'arithmetic' operators:
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+p1 + p2
+```
+
+#
+ 
+```{r}
+#| echo: true
+#| fig-align: center
+
+p1 / p2
+```
+
+
+
+
+## Adding trendlines (an aside) ((Not sure where this fits - an exercise??))
+
+```{r}
+#| echo: true
+#| eval: false
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(~ island) +
+  geom_smooth(
+    mapping = aes(group = island),
+    method = "lm",
+    colour = "darkgrey")
+```
+
+#
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| 
+p_bm_fl +
+  geom_point(size = 2,
+             alpha = 0.6) +
+  facet_wrap(~ island) +
+  geom_smooth(
+    mapping = aes(group = island),
+    method = "lm",
+    colour = "darkgrey")
+```
+
+
+

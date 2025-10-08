@@ -1,0 +1,92 @@
+---
+title: "Introduction to R"
+subtitle: "Into the tidyverse"
+---
+
+## Overview
+
+:::: {.columns}
+
+::: {.column width="55%"}
+
+[**R**](https://cran.r-project.org/) is a powerful and flexible programming language used by academics, corporations and governments all over the world. 
+
+This course will focus on the fundamentals of "the tidyverse", a streamlined and flexible dialect of the R programming language.
+
+
+:::
+
+::: {.column width="5%"}
+:::
+
+::: {.column width="35%"}
+::: {.callout-note icon=false}
+### Next session
+{{< fa calendar-days >}} 29 - 31 October 2025 \
+{{< fa clock >}} 13:00 - 17:00 \
+{{< fa calendar-xmark >}} Registration will open shortly \
+{{< fa flask-vial >}} Introduction to R \
+{{< fa signal >}} Beginner \
+{{< fa coins >}} Free \
+{{< fa location-dot >}} MSA 4.130, tbc \
+
+:::
+
+:::
+
+::::
+
+In this course you will:
+
++ Be introduced to the [**R**](https://cran.r-project.org/) language, the [tidyverse](https://www.tidyverse.org/) dialect, and the RStudio interface
++ Learn to use functions, objects, and packages: the core tools of the R language
++ Practice writing clean and readable code
++ Learn to interpret errors and warnings
++ Learn the fundamentals of 'data wrangling'
++ Create clear and elegant data visualisations
+
+By the end of this course you will be able to start working with R and know enough to teach yourself more.
+
+
+## Requirements
+
+### Prior knowledge
+
+**No prior knowledge in programming** is required, while a genuine interest in statistical programming is welcome.
+This course assumes you are comfortable with basic math, algebra and logical operations. 
+
+
+### Material
+
+Each student must bring their **own laptop** with **R** and **RStudio** installed with recent versions. Please check the [install tutorial](https://r-training.pages.uni.lu/r-intro/setup.html) to set it up prior to the course.
+
+Course materials will be made available on this site under [Lectures](slides.qmd) and [Practicals](practicals.qmd) as the course develops.
+
+## Schedule
+
+### Dates and time
+
+The course consist of interleaved lectures and hands-on exercises followed by a wrap-up and questions session.
+
+- 13:00 - 13:15  Set-up & Welcome
+- 13:15 - 17:00 Course work - mix of lectures and exercises
+
+Please join us for the welcome to test your connection, R set-up and to pose questions. 
+
+
+---
+
+## Location
+
+This course will be hold on-site at the University of Luxembourg, Maison du Savoir building on the Belval Campus, Luxembourg, Room 4.130.
+
+
+
+## Elixir
+
+This event is supported by [ELIXIR-Luxembourg](https://elixir-luxembourg.org/events/) and will be held under the [ELIXIR Code of Conduct](https://elixir-europe.org/events/code-of-conduct).
+
+
+## Contact
+
+- [Tyler McInnes](mailto:tyler.mcinnes@uni.lu)

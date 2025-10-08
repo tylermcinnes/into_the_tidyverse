@@ -1,0 +1,525 @@
+---
+title: "Day 1: Introduction to R and RStudio"
+format:
+  revealjs:
+    theme: dracula
+    incremental: true
+    transition: fade
+    code-line-numbers: true
+    self-contained: true
+    embed-resources: true
+    code-overflow: wrap
+#    include-in-header: fontawesome.html
+---
+
+## Learning Objectives {.smaller}
+
+You will learn to: 
+
+- Recognise the R language and tidyverse dialect.
+- Work within the RStudio interface.
+- Use functions and objects: the building blocks of the R language.
+- Install and import packages.
+- Use the pipe and write clean, readable code.
+- Use arguments to refine functions.
+- Interpret errors and warnings.
+- Understand the format of vectors, matrices, data frames and tibbles.
+
+## The R programming language
+
+- Created in 1993 by Dr. Ross Ihaka and Dr. Robert Gentleman at the University of Auckland, Aotearoa New Zealand.
+- Widely used in statistics and biological sciences.
+- Free, flexible, supported by the community.
+- "Base R" was used to build "packages" that accomplish specific tasks. 
+- Base R packages includes a mix of styles and formats.
+  - Challenging to learn!
+
+## The tidyverse dialect
+
+- A series of packages designed from the ground up to work together.
+- Uses a consistent and logical style with a shared format.
+- Human readable, intuitive, easy to learn.
+- Highly popular, well documented, many resources available.
+- Designed *by* programmers *for* non-programmers.
+
+## The tidyverse style
+
+- Each variable stored in a column.
+- Each observation is stored in a row. 
+
+\
+
+
+
+```{r}
+penguins[1:3,1:6]
+```
+
+
+## RStudio
+
+- Interface for R providing clear visual cues and an easy to manage workspace.
+- Image of panels
+- Under Tools, Global Options, Appearance set a theme and change your text size.
+
+## Follow me! 
+
+Let's customise our RStudio interface
+
+## It's your turn! {.smaller} 
+
+### Exercise: Customise your RStudio
+
+- Under Tools (to the right of File), select Global Options. 
+
+- In the Code tab, tick "Soft-wrap source files".
+
+- In the Appearance tab:
+
+  - Adjust the Editor font size and Editor font to suit you (the default font is Monaco).
+  
+  - Choose an Editor theme. You will spend a long time looking at your RStudio screen, we recommend something with high contrast that is not too hard to look at. Try these examples: 
+  
+    - Chrome, Crimson Editor and Dreamweaver are gentle light themes. 
+    
+    - Cobalt, Idle Fingers and Pastel on Dark are gentle dark themes. 
+
+    - Gob is high intensity. 
+
+## Projects
+
+- Projects keep your work together and organised.
+- Each project is self-contained and portable.
+- Sets your working directory and controls file paths.
+
+- Practically: a project is a single directory with a .Rproj file that manages how RStudio interacts with other files you are working with.
+
+## Starting a project
+
+newProject image
+
+- Select New project
+- Give the project a short, descriptive name with no spaces (*e.g.,* frog_rna_seq)
+
+## It's your turn! {.slide-practical}
+
+### Exercise 1
+
+-   Create a new project called `R_intro` 
+-   In a new folder/directory
+-   Do not select `Create a git repository` or `Use renv` in the dialogue
+-   Create sub-folders `data`, `analysis`, `plots`
+
+:::{.Large}
+```         
+R_intro
+  |-- data
+  |-- analysis
+  |-- plots
+  |-- R_intro.Rproj
+```
+:::
+
+## Scripts
+
+- Document every step of your work with scripts.
+- Quarto (.qmd) files provide a format for including code blocks and text.
+- Record your decisions and thought process as well as your code!
+- Note that Quarto files have a lot of extra functionality that we won't cover in this workshop.
+
+images: File > New File > Quarto document > check Create Empty Document
+
+## Functions and objects
+
+- We can think of *objects* as being equivalent to files.
+- **Functions** do things:
+  - Calculate the mean of a series of numbers.
+  - Count the number of times a name has appeared in a list.
+  - Rename or reorganise columns (variables) in a file.
+
+
+
+## Objects
+
+Objects are how we store things (usually data) in R. Objects have two things: a name and some attached data.
+
+```{r}
+#| echo: true
+
+object5 <- 3 + 2
+
+object5
+```
+
+\
+
+```{r}
+#| echo: true
+
+object6 <- 12 - (2*3)
+
+object6
+```
+
+\
+
+```{r}
+#| echo: true
+
+object5 + object6
+```
+
+:::{.notes}
+We use the "<-" symbol to assign data to an object. 
+
+R also works as a calculator. If we type 3 + 2, we get 5 as a result.
+
+object5 + object6 shows that we can work directly with objects. 
+:::
+
+
+## Format of a function
+
+The format of a function is always "function_name" followed by a set of parenthesis. There is usually a target within the parenthesis. 
+
+```{r}
+#| echo: true
+
+sum(1,3,4)
+```
+
+Here, the function "sum" is adding together the values 1, 3, and 4. 
+
+## The value of objects
+
+Objects can be used to store complex data: 
+
+## Functions and objects
+
+Applying functions to objects, and storing the output of functions in objects, is how we use R.
+
+```{r}
+#| echo: true
+
+object11 <- sum(object5, object6)
+```
+
+\
+
+```{r}
+#| echo: true
+
+object11
+```
+
+
+## Loading the penguins data
+
+The `library()` function is loading palmerpenguins - a penguin dataset. 
+```{r}
+#| echo: true
+
+library(palmerpenguins)
+```
+
+The `head()` function shows us the start of the penguins object. 
+```{r}
+#| echo: true
+
+head(penguins)
+```
+
+::: {.notes}
+There is also other information here on the screen - we cover this later but briefly, RStudio is showing us some metadata on our object:
+
+- A tibble is a type of object, more on that later. 
+
+- The dimensions: 6 x 8. Six rows (`head()` shows the top six rows) and 8 columns (species, island, bill_length, bill_depth, flipper_length, and body_mass, plus two more columns (variables): sex and year). 
+:::
+
+## Arguments
+
+Arguments refine how functions work.
+
+`function_name(target, extra_argument(s))`
+
+Examples:
+```{r}
+#| echo: true
+
+round(100/3, 2)
+round(100/3, 5)
+```
+
+- This can be as *small* as changing the number of digits when using `round()`, or the number of rows returned by `head()`. 
+- They can be as significant as **changing the underlying method**, for example when using a function to adjust for multiple testing. 
+
+## Arguments cont.
+
+```{r}
+#| echo: true
+
+head(penguins, 3)
+```
+ 
+What is significant about this?
+
+- Many functions *have defaults which are not shown to us* *e.g.,* the `head()` function defaults to 6 rows. 
+- This matters when a function has a default method or behaviour. 
+
+## Help!
+
+We can learn more about a function by typing a "?" in front of any function name.
+```{r}
+#| echo: true
+#| eval: false
+
+?head()
+```
+
+\
+
+A lot of information at first! 
+
+- Description can be helpful.
+- Arguments explains what is required and shows what default arguments are in place. 
+- Often gives you some details to google/AI chat.
+
+## Micro break exercise
+
+What have we learned so far? 
+
+- R and RStudio, R and the tidyverse
+
+- Organise with Projects and Scripts
+
+- Functions do things
+
+- Objects store information
+
+- Arguments refine functions
+
+- `?function_name()`
+
+## The pipe
+
+The pipe is a new way to work with functions. Using the pipe will make your code cleaner and easier to read. 
+
+To use the pipe we will load the tidyverse library, which is a collection of many packages. 
+
+#
+
+```{r}
+#| echo: true
+
+library(tidyverse)     # old format
+
+penguins %>% head()    # new format
+```
+
+
+## The pipe cont.
+
+What's changed? Instead of naming the function and supplying the target, we now start with data and then supply the function.
+
+\
+
+Why? This format makes your code much easier to read, especially when you need to do a more complex task.
+
+\
+
+This works best if you read "%>%" as "and then..."
+
+## The pipe cont.
+
+```{r}
+#| echo: true
+
+penguins %>% # Start with the penguin data AND THEN
+  na.omit() %>% # Remove the NAs AND THEN
+  arrange(bill_length_mm) %>% # Arrange (sort) the rows AND THEN
+  head() # Keep just the head (top 6 rows)
+```
+
+With the pipe we can "chain" together functions to achieve complex tasks. Notice how it is still (mostly) readable.
+
+
+
+
+## Errors and warnings
+
+RStudio will (very) regularly provide you with two types of feedback:
+
+- Errors, which tell you something has **failed** and must be addressed.
+  - Identify the error and change your code. 
+  - Initially you will make many spelling and typing errors - R is very fussy!
+  - Alternatively, find a new approach.
+
+#  
+- Warnings, which tell *something has happened and you should be aware of it*. 
+  - There is a new version of the software you are using.
+  - Two packages you are using may contradict one another.
+  - NAs were removed or ignored when performing a function. 
+  
+
+
+
+## Packages (briefly)
+
+One of the most powerful features of R is the ability to install and load packages.
+
+Packages have been designed to accomplish specific tasks. We can equate packages with apps. 
+
+Packages will often include a series of new functions and an example dataset. 
+
+Some packages will introduce functions that have the same name. If this is the case you will receive a warning message and be prompted to use the full name of the function in this format: `package::functionName()`
+
+# 
+```{r}
+#| echo: true
+
+penguins %>% head() %>% arrange(bill_length_mm)
+
+penguins %>% head() %>% dplyr::arrange(bill_length_mm)
+```
+
+::: {.notes}
+These two lines of code are doing the same thing. You probably won't encounter this while you are getting started, but if you do come across this format, you can recognise it. 
+:::
+
+## Data structures
+
+R is 'data aware'. That is to say that objects are different depending on whether they are a series of numbers (*e.g.,* 1, 3, 6, 7, 2), a series of characters (*e.g.,* "One", "Three", "Six", "Seven", "Two"), or something more complex like a matrix or list. 
+
+We will look at some of the common data structures.
+
+
+## Data structures - vectors
+
+Vectors are one-dimensional strings of data that are all of the same type. 
+
+```{r}
+#| echo: true
+
+
+numeric_vector <- c(1,3,4,72)
+character_vector <- c("This","is","a","vector","with","a","length","of","nine")
+short_character_vector <- c("This is a character vector too, but it's much shorter!")
+misleading_character_vector <- c("1","3","89","2", "11")
+```
+
+
+
+## It's your turn! {.smaller}
+
+### Exercise 2
+
+-   Create the four vectors below. Copy them exactly! 
+-   Use the `class()` and `length()` functions to get information about the vectors. 
+-   Test the `sort()` function on "numeric_vector" and "misleading_character_vector". 
+-   What is going wrong with sort here?
+
+\
+
+:::{.Large}
+```         
+numeric_vector <- c(1,3,4,72)
+
+character_vector <- c("This","is","a","vector","with","a","length","of","nine")
+
+short_character_vector <- c("This is a character vector too, but it's much shorter!")
+
+misleading_character_vector <- c("1","3","89","2","11")
+```
+:::
+
+## Understanding vector types
+
+```{r}
+#| echo: true
+
+numeric_vector %>% sum()
+character_vector %>% length()
+short_character_vector %>% length()
+misleading_character_vector %>% sort()
+```
+
+## Data structures - matrices
+
+A matrix is a 2D version of a vector. 
+
+```{r}
+#| echo: true
+
+plain_matrix <- matrix(1:12, nrow = 4, ncol = 3)
+
+plain_matrix
+```
+
+\
+
+This matrix has no information about the variables (column names) or observations (row names). 
+
+## Data structures - data frames
+
+A data frame is made up of vectors (columns) which must be of the same length. Importantly, each vector can be of a *different* type. This means we can store complex information (sample names as characters, measurements as numerics *etc.,*).
+```{r}
+#| echo: true
+results <- data.frame(
+  sample = c("sample_A1","sample_A2","sample_B1","sample_B2"),
+  measurement = c(8.2, 7.9, 6.7, 6.6),
+  response = c(TRUE, TRUE, FALSE, TRUE)
+)
+
+results
+```
+
+## Data structures - tibbles
+
+Tibbles are a specific and updated version of data frames designed for the tidyverse. 
+
+\
+
+From the tibble overview page:
+
+\
+
+  "Tibbles are data.frames that are lazy and surly: they do less and complain more. This forces you to confront problems earlier, leading to cleaner, more expressive code."
+
+# 
+
+```{r}
+#| echo: true
+
+results_tbl <- tibble(
+  sample = c("sample_A1","sample_A2","sample_B1","sample_B2"),
+  measurement = c(8.2, 7.9, 6.7, 6.6),
+  response = c(TRUE, TRUE, FALSE, TRUE)
+)
+```
+
+\
+
+```{r}
+#| echo: true
+
+results_tbl
+```
+
+
+## Summary {.smaller}
+
+In this session we have:
+
+- Introduced R, the tidyverse dialect, and RStudio. 
+- Started a new project for easy file management.
+- Learned to work in scripts for storing data. 
+- Introduced functions.
+- Created new objects.
+- Looked at arguments, and default arguments.
+- Introduced the pipe for clear and readable code.
+- Covered errors and warnings.
+- Introduced data structures: 
+  - Vectors and Matrices
+  - Data frames
+  - Tibbles (lazy and surly, forcing you to write better code)
