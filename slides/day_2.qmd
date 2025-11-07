@@ -12,23 +12,32 @@ format:
 #    include-in-header: fontawesome.html
 ---
 
-## Notes
 
-- After restarting R I need to run `library(dplyr)` (but not `library(palmerpenguins)`) to execute penguins %>% head(). Why is palmerpenguins loaded but not dplyr?
 
 
 ## Introduction - State of the data
 
 "I have to admit, this [recording] is 80% me orienting to this week's data."
-- LinkedIn, anon
+
+\- LinkedIn, anon
+
+
+\
 
 "80% orienting to the data is real life!"
-- Most of the comments section
+
+\- Most of the comments section
+
+::: {.notes}
+
+On day 1 we started to explore our data, but we did so within the bounds of the data as we found it. That is, we did not change or modify our data in any way. Now we will introduce functions that will allow us to modify our data, starting out with very simple tasks and building towards more complex transformations. 
+
+:::
 
 ## Learning objectives
 
-- Understand what is meant by data wrangling.
-- Learn the fundamentals of processing data and prepeparing data for analysis.
+- Understand what is meant by data wrangling. 
+- Learn the fundamentals of processing data and preparing data for analysis.
 - Become comfortable with the main dplyr functions.
 - Practice data wrangling.
 
@@ -68,6 +77,11 @@ Functions for *columns*:
 
 `mutate()`
 
+::: {.notes}
+You will use these dplyr verbs a lot - so we are going to really stress these, and we have exercises for you to practice. Some of these exercises will feel a little repetitive, and that's deliberate - it's how we learn. 
+
+:::
+
 ## The dplyr verbs have functional names
 
 
@@ -95,28 +109,28 @@ library(palmerpenguins)
 Start by looking at our data:
 ```{r}
 #| echo: true
-penguins %>% head()
+penguins  |>  head()
 ```
 
 #
 
 ```{r}
 #| echo: true
-penguins %>% tail()
+penguins |> tail()
 ```
 
 ## `arrange()` the rows {.smaller}
 ```{r}
 #| echo: true
 
-penguins %>% arrange(body_mass_g) %>% head()
+penguins |> arrange(body_mass_g) |> head()
 ```
 
-#
+# 
 
 ```{r}
 #| echo: true
-penguins %>% arrange(desc(body_mass_g)) %>% head()
+penguins |> arrange(desc(body_mass_g)) |> head()
 ```
 
 ## `arrange()` the rows {.smaller}
@@ -124,11 +138,24 @@ penguins %>% arrange(desc(body_mass_g)) %>% head()
 #| echo: true
 
 # Penguin body mass by year
-penguins %>% arrange(desc(year),desc(body_mass_g)) %>% head()
+penguins |> arrange(desc(year),desc(body_mass_g)) |> head()
 ```
-*Note* you can apply `desc()` to any number of arguments within `arrange()`, but you must apply `desc()` to each variable individually.
-
 Combining arguments within the `arrange()` function can be used for splitting ties (*e.g.,* when you have samples with year, month and date recorded). 
+
+- *Note* you can apply `desc()` to any number of arguments within `arrange()`, but you must apply `desc()` to each variable individually.
+
+
+## Practical uses with `arrange()`
+
+`count()` plus `arrange()` is a good way to view the frequency of data. 
+
+**Exercise:** pipe penguins to `count()`, choosing a single variable to include inside `count()`, then pipe to `arrange()`.
+(this might be harder than it first looks)
+
+- Solution: `penguins |> count(island) |> arrange(n)`
+
+- Why "n"? Look at the result of penguins |> count(island) and check the variable names. 
+
 
 ## `relocate()` the columns
 
@@ -140,7 +167,7 @@ Change the order of columns with `relocate()`.
 ```{r}
 #| echo: true
 
-penguins %>% relocate(year) %>% head()
+penguins |> relocate(year) |> head()
 ```
 
 ## `relocate()` the columns
@@ -152,7 +179,7 @@ We can choose to place a column immediately before, or immediately after, anothe
 ```{r}
 #| echo: true
 
-penguins %>% relocate(year, .after = island) %>% head()
+penguins |> relocate(year, .after = island) |> head()
 ```
 
 ## (Re)arranging summary
@@ -165,25 +192,23 @@ Remember: a**rr**ange is for **r**ows, while sele*c*t is for *c*olumns.
 
 **Reminder:** none of our functions are modifying the original dataset. Re-arranged data is only being displayed on the screen. Save the output of these functions to a new object if you want to store data. 
 
-## It's your turn! {.slide-practical}
+## It's your turn! {.smaller}
 
-### Exercise 1 
+### Order and rearrange 
 
-*Update this to something different*
+Arrange the penguins in order of body mass (lightest to heaviest).
 
-Task: understand what happened to the NAs in our dataset when we ran arrange().
+Arrange the penguins by flipper length, with the longest flippers first. 
 
--   Use the `summary()` function and read the output to identify how many rows have NAs.
--   Why is this an imperfect method? What does `summary()` *not* tell us in this case?
+Within each species, sort penguins by bill length. 
 
--   Use the `count()` function to check how many rows are in the penguins dataset.
--   Use 
+Move all the measurement columns so they appear immediately after species. 
 
-:::{.Large}
-```         
+Move the year column so that it appears last. 
 
-```
-:::
+\ 
+
+**Challenge:** Create a table that lists penguins ordered by body mass (heaviest first) with the species and measurement columns shown first. 
 
 
 
@@ -197,29 +222,48 @@ As above, we can use the **r** in filte**r** and the *c* in sele*c*t to help us 
 
 ## `filter()` with single criteria
 
-Keep all rows that meet a certain criteria in a given column. Criteria can be built using any combination of Boolean values (greater than, less than or equal to, exactly equal to) using "and" or "or".
-- *e.g.,* keep any row if the value is greater than 1 or less than -1
+Keep all rows that meet a certain criteria in a given column. Criteria can be built using any combination of Boolean values (greater than, less than or equal to, exactly equal to) using "and" or "or" *e.g.,* keep any row if the value is greater than 1 or less than -1
 
 ```{r}
 #| echo: true
 
-penguins %>% filter(body_mass_g > 4000) %>% head()
+penguins |> filter(body_mass_g > 4000) |> head()
 ```
+
+## `filter()` combinations
 ```{r}
 #| echo: true
 
-penguins %>% filter(body_mass_g > 4000) %>% count()
+penguins |> filter(body_mass_g > 4000) |> count()
 ```
+
+\
+
+```{r}
+#| echo: true
+
+penguins |> filter(body_mass_g > 4750) |> distinct(island)
+```
+
+Chaining together functions like this is very powerful!
+
 
 ## Filter criteria
 
-**Add a table of the criteria (>, <, >=, ==)**
+- \> return all values greater than x
+
+- < return all values less than x
+
+- \>= return all values greater than *or* equal to x
+
+- == return all values *exactly* equal to
+
 
 ## `filter()` with and/or
 ```{r}
 #| echo: true
 
-penguins %>% filter(species == "Gentoo" & bill_length_mm > 50) %>% count()
+penguins |> filter(species == "Gentoo" & bill_length_mm > 50) |> count()
 # 22 Gentoo samples have a bill length greater than 50.
 ```
 
@@ -228,9 +272,23 @@ penguins %>% filter(species == "Gentoo" & bill_length_mm > 50) %>% count()
 ```{r}
 #| echo: true
 
-penguins %>% filter(species == "Gentoo" | island == "Biscoe") %>% count()
+penguins |> filter(species == "Gentoo" | island == "Biscoe") |> count()
 # 168 samples are either Gentoo species OR are found on the Biscoe island. 
 ```
+
+## It's your turn! {.slide-practical}
+
+### `filter()` practice
+
+- How many Adelie penguins are there?
+
+- Using a single command, show which island has the most penguins.
+
+- Display all the Gentoo penguins which have a body mass greater than 5000g. 
+
+- For how many penguins do we have sex data?
+
+- I define a small penguin as weighing less than 3500g and having a bill shorter than 35mm. How many penguins meet this criteria?
 
 ## `select()` the columns to keep
 
@@ -238,15 +296,15 @@ penguins %>% filter(species == "Gentoo" | island == "Biscoe") %>% count()
 ```{r}
 #| echo: true
 
-penguins %>% select(species, island) %>% head(n = 4)
+penguins |> select(species, island) |> head(n = 4)
 ```
 
-\
+## Keeping a range of columns
 
 ```{r}
 #| echo: true
 
-penguins %>% select(bill_length_mm:body_mass_g) %>% head(n = 4)
+penguins |> select(bill_length_mm:body_mass_g) |> head(n = 4)
 ```
 
 ## `select()` advanced usage
@@ -262,13 +320,13 @@ Instead of needing to select individual variables we can select variables that m
 ```{r}
 #| echo: true
 
-penguins %>% select(starts_with("bill")) %>% head(n = 4)
+penguins |> select(starts_with("bill")) |> head(n = 4)
 ```
 \
 ```{r}
 #| echo: true
 
-penguins %>% select(ends_with("s")) %>% head(n = 4)
+penguins |> select(ends_with("s")) |> head(n = 4)
 ```
 
 ## `select()` advanced usage
@@ -276,24 +334,26 @@ penguins %>% select(ends_with("s")) %>% head(n = 4)
 ```{r}
 #| echo: true
 
-penguins %>% select(contains("_")) %>% head(n = 4)
+penguins |> select(contains("_")) |> head(n = 4)
 ```
-\
+
+## `select()` everything except
+
 ```{r}
 #| echo: true
 
-penguins %>% select(!species) %>% head(n = 4)
+penguins |> select(!species) |> head(n = 4)
 # Do NOT select species, but keep everything else.
 # Use `!contains()` to exclude variables containing a specific pattern.
 ```
 
 ## It's your turn! {.slide-practical}
 
-### Exercise 2 
+### Combining arguments
 
 This exercise will reinforce your understanding of combining arguments.
 
-Use `select()` and `starts_with()` to keep all columns that measure a physical feature of the penguins (bill_lenth_mm, bill_depth_mm, flipper_lenth_mm, body_mass_g). 
+Use `select()` and `starts_with()` to keep all columns that measure a physical feature of the penguins (bill_length_mm, bill_depth_mm, flipper_length_mm, body_mass_g). 
 
 
 :::{.Large}
@@ -310,13 +370,14 @@ filter(species == "Gentoo" | island == "Biscoe")
 
 You may have tried this:
 
-**penguins %>% select(starts_with("b" | "f")) %>% head()**
+**penguins |> select(starts_with("b" | "f")) |> head()**
 
 
 We need to specify `starts_with()` for each criteria individually. We used this same logic earlier when we used `arrange(desc(year),desc(body_mass))`.
 
 ```{r}
-penguins %>% select(starts_with("b") | starts_with("f")) %>% head()
+#| echo: true
+penguins |> select(starts_with("b") | starts_with("f")) |> head()
 ```
 
 ## Understanding the solution
@@ -339,7 +400,7 @@ The distinct function will remove rows that have the same value for a selected c
 ```{r}
 #| echo: true
 
-penguins %>% distinct(year) %>% head()
+penguins |> distinct(year) |> head()
 # All duplicates of "2007", "2008", "2009" have been removed.
 ```
 
@@ -349,12 +410,26 @@ Useful when looking for unique *combinations*:
 ```{r}
 #| echo: true
 
-penguins %>% distinct(species, island) %>% head()
+penguins |> distinct(species, island) |> head()
 ```
 
 \ 
 
 Reveals Adelie penguins are found on all three islands, while Gentoo and Chinstrap are restricted to Biscoe and Dream, respectively.
+
+
+## It's your turn! {.slide-practical}
+
+### Combining filter and distinct for complex tasks
+
+For each penguin species, identify which islands they are found on.
+
+Filter for penguins with a body mass greater than 4000g, then find the distinct species-sex combinations (*e.g.,* among 'big' penguins, are there both males and females from all species, or are only some species/sexes present). 
+
+Filter for Gentoo penguins from the Biscoe island. How many distinct years were they sampled in?
+
+
+
 
 ## `mutate()` calculates new variables
 
@@ -363,10 +438,10 @@ Reveals Adelie penguins are found on all three islands, while Gentoo and Chinstr
 ```{r}
 #| echo: true
 
-penguins %>% 
-  mutate(bill_dim_ratio = bill_length_mm / bill_depth_mm) %>% 
-  arrange(desc(bill_dim_ratio)) %>% 
-  select(contains("_")) %>% 
+penguins |> 
+  mutate(bill_dim_ratio = bill_length_mm / bill_depth_mm) |> 
+  arrange(desc(bill_dim_ratio)) |> 
+  select(contains("_")) |> 
   head()
 ```
 
@@ -378,6 +453,67 @@ Data has been arranged based on this new variable (note, it's immediately availa
 `select()` used to reduce the number of columns on the screen.
 :::
 
+## It's your turn! {.slide-practical}
+
+### `mutate()` some new variables
+
+Create a new variable called `body_mass_kg`.
+
+Create a new variable `flipper_to_mass_ratio`, and sort it in decreasing order. 
+
+\- This is called a derived variable and is extremely useful. 
+
+Create a new variable called `heavy` indicating whether `body_mass_g` is greater than 4.5kg. 
+
+
+
+## `mutate()` and `case_when()`
+
+`case_when()` is useful for adding 'class' variables. 
+
+```{r}
+#| echo: true
+
+penguins |> 
+  mutate(flipper_class = case_when(
+    flipper_length_mm < 190 ~ "short",
+    flipper_length_mm <= 210 ~ "medium",
+    TRUE ~ "long"
+  )) |> 
+  distinct(species, flipper_class)
+```
+
+## `case_when()` combines well with ggplot
+
+Use `case_when()` to define penguins as 'big', 'medium' or 'small' based on two variables (this is arbitrary, you decide how to define these values). Call the new variable "size".
+
+Recall the code for ggplot, and generate a plot showing the two variables on the x and y axis, with size shown by colour. 
+
+- Hint: the code for `case_when()`:   mutate(flipper_class = case_when(
+    flipper_length_mm < 190 ~ "short",
+    flipper_length_mm <= 210 ~ "medium",
+    TRUE ~ "long"
+  ))
+
+## Solution
+```{r}
+#| echo: true
+#| fig-align: center
+
+
+penguins |> 
+  mutate(size = case_when(
+    flipper_length_mm > 210 & body_mass_g > 4500 ~ "big",
+    flipper_length_mm < 190 & body_mass_g < 3500 ~ "small",
+    TRUE ~ "medium"
+  )) |> 
+  ggplot(mapping = aes(x = flipper_length_mm,
+                       y = body_mass_g,
+                       colour = size)) +
+  geom_point()
+```
+
+
 ## `rename()` columns
 
 `rename()` renames variables. Keep variable names short, descriptive, and uniform.
@@ -388,17 +524,66 @@ Develop a system and be consistent.
 
 - otherPeoplePreferCamelCase
 
+We **strongly** recomend that all objects and files are named in snake_case. 
+
 #
 
 ```{r}
 #| echo: true
 
-penguins %>% rename(flipLength = flipper_length_mm) %>% head()
+penguins |> rename(flipLength = flipper_length_mm) |> head()
 ```
 
-## `group_by()` and `summarize()` ???
+## `group_by()`
 
-Include group_by() and summarize()?
+So far we have calculated summary statistics or arranged our data **assuming all our observations are homogeneous**, *i.e.,* we have not dealt with sub-groups. 
+
+How do we calculate the mean body mass by species, island, or sex? 
+
+`group_by()` allows us to move from computing a single summary statistic to calculating multiple summary statistics.
+
+`group_by()` is functionally tagging observations with group labels. 
+
+## Mechanics of `group_by()`
+
+```{r}
+#| echo: true
+
+# Looks the same
+# Note "Groups: species [3]"
+penguins |> group_by(species)
+```
+Can group by more than one variable *e.g.,* `group_by(species, island)`
+
+
+## Combining `group_by()` with other functions
+
+`group_by()` plus another function will cause that function to be applied to individual groups (*e.g.,* returning summary statistics, arranging, or filtering on a per-group basis).
+
+```{r}
+#| echo: true
+
+penguins |> 
+  group_by(species) |> 
+  summarize(mean_body_mass = mean(body_mass_g, na.rm = TRUE))
+```
+
+**Exercise:** Change `group_by()` to group by species and island and note the output.
+
+## `group_by` and `filter()`
+
+Find the heaviest penguin per species:
+
+```{r}
+#| echo: true
+
+penguins |> 
+  group_by(species) |> 
+  filter(body_mass_g == max(body_mass_g, na.rm = TRUE))
+```
+
+
+
 
 
 ## A preview of tomorrow

@@ -12,18 +12,60 @@ format:
 #    include-in-header: fontawesome.html
 ---
 
-## Learning Objectives {.smaller}
 
-You will learn to: 
+# This workshop...
 
-- Recognise the R language and tidyverse dialect.
-- Work within the RStudio interface.
-- Use functions and objects: the building blocks of the R language.
-- Install and import packages.
-- Use the pipe and write clean, readable code.
-- Use arguments to refine functions.
-- Interpret errors and warnings.
-- Understand the format of vectors, matrices, data frames and tibbles.
+Assumes you are an absolute beginner.
+
+Will teach you the fundamentals of working in R by walking through a 'typical' bioinformatics workflow. 
+
+We will work slowly and there will be repetition. You will build good habits through experience.
+
+At the end of this course you will grasp the fundamentals and be in a good position to work with google, llms, supervisors and colleagues to solve specific problems and challenges. 
+
+# Workshop aims
+
+We will: 
+
+- Set up a new Project in RStudio to help manage all our files.
+
+- Import data into RStudio.
+
+- Clean and tidy the data.
+
+- Visualise the data for ourselves.
+
+- Carry out "data wrangling" (getting the data into the shapes and formats we need).
+
+- Visualise the data for presentation. 
+
+
+
+## Objectives for the course
+
+- Learn how to use RStudio and Projects to keep work organised.
+
+- Learn the fundamentals of the R programming language: functions, objects and packages.
+
+- Develop the habit of writing readable, reproducible code.
+
+- Be able to interpret errors and warnings.
+
+- Understand the format of data in R.
+
+- Use the dplyr functions for data preparation and processing ("wrangling").
+
+- Be able to create basic visualisations of your data. 
+
+
+## On the topic of LLMS
+
+Many llms write very good R code *if given accurate context and clear requests*. 
+
+Many llms will struggle to solve the issues you encounter in R because **you don't know what the issue is**. 
+
+During this workshop, please refrain from using llms to solve exercises. You need to practice doing these tasks.
+
 
 ## The R programming language
 
@@ -49,18 +91,273 @@ You will learn to:
 
 \
 
-
-
 ```{r}
 penguins[1:3,1:6]
 ```
 
+# The RStudio interface
 
-## RStudio
+RStudio is an interface for R.
 
-- Interface for R providing clear visual cues and an easy to manage workspace.
-- Image of panels
-- Under Tools, Global Options, Appearance set a theme and change your text size.
+Analogy: R is the engine, RStudio is driver's seat. 
+
+![](../img/day_1/rstudio_three_pane.png)
+
+::: {.notes}
+When you first open RStudio it will look something like this image. Right now there are three panes or windows: Console which is where our code gets run, Environment which is where we see what data we have in RStudio, and Files which is showing us files on our computer. We can also see that each of these windows has different tabs. E.g., Files pane also has Plots, Packages, Help, and others. 
+
+The first thing we are going to do is to customize our RStudio. 
+:::
+
+## Customising RStudio: adding a source pane
+
+It is best practice to write all code in a document to be saved. 
+
+Click File > New File > Quarto Document.
+
+Give this file the title: "Getting started with RStudio" and click "Create Blank Document" on the bottom left. 
+
+We will use this new space to write our code and our notes.
+
+#
+
+Your screen should now look like this: 
+
+![](../img/day_1/rstudio_four_pane.png)
+
+
+::: {.notes}
+
+We will cover writing in this document, which is called an R script or Quarto document, in more detail soon. For now, the key thing to remember is that we always want to write our code in this document. 
+
+:::
+
+## Customising the RStudio layout
+
+:::: columns
+
+::: {.column width="45%"}
+We can rearrange the layout of the four panes.
+
+Click Tools > Global Options to bring up the options window. 
+
+Select the "Pane Layout" tab, and use the drop-down arrows to set the four panes to be Source, Console, Environment, and Files.
+
+:::
+
+::: {.column width="45%"}
+
+![](../img/day_1/global_options_layout.png)
+
+:::
+
+::: {.notes}
+In this section we will rearrange the four panes (windows) into a common configuration. Many people seem to prefer this layout over the default, so we recommend you adopt this while you are getting started. 
+
+:::
+
+::::
+
+## Let's write and run some R code
+
+We will write and run code directly from the source document we just opened. 
+
+We store all code in "chunks". To add a chunk, click on the button that looks like a `green` square with a white "C", and a small `green` "`+`" in the top left. It should be to the left of the "Run" button. 
+
+:::: columns
+
+::: {.column width="65%"}
+![](../img/day_1/chunk_button_1.png)
+:::
+
+
+::: {.column width="35%"}
+![](../img/day_1/chunk_button_2.png)
+:::
+::::
+
+## Code chunks
+
+![](../img/day_1/chunk_example.png)
+
+Within the code chunk, type some basic arithmetic (*e.g.,* 5 + 9).
+
+Run the chunk with the green arrow on the right. 
+
+## Code chunks cont
+
+We should see the code *and* the output appear in the console. 
+
+This is how we work in R: write code in a document, run the code, output is either displayed on the screen or saved as files. 
+
+## It's your turn! {.slide-practical}
+
+### Buttons are slow - use shortcuts!
+
+Use either `option` + `command` + i (Mac) or `Ctrl` + `Alt` + i (Windows) to add a new code chunk.
+
+In the new chunk write: 
+```{r}
+#| echo: true
+
+6 + 6
+
+4 * 12
+```
+
+Click *anywhere* on the line that says 6 + 6 and use `command` + return (Mac) or `Ctrl` + enter to run the code. 
+
+\
+
+**Save the file so that this code can be accessed later. **
+
+::: {.notes}
+
+You can either run *all* the code within a chunk with the green arrow, OR you can highlight all the code in the chunk and use command+return / ctrl+enter.
+
+You can put the mouse cursor *anywhere* on a line to execute it - it does not have to be at the start or the end. 
+
+New users waste so much time carefully highlighting, or moving the mouse around, just to run code!
+
+Similarly, use the keyboard shortcuts for copy paste. Do not right click and select "copy". 
+
+After saving, ask everyone to close the script.
+:::
+
+## Group discussion about files
+
+\
+
+- Where did you save your file? 
+
+\
+
+- What did you call your file? 
+
+\
+
+- Can you locate that file on your device right now? 
+
+::: {.notes}
+
+**Start with poll:** hands up if you saved this file to your desktop, to Downloads, to Documents. Hands up if you have a lot of random files saved in this location.
+
+Did anyone save it somewhere carefully? 
+
+**File naming poll:** hands up if you named your file some combination of "file", "r", "script", "quarto", "final.final".
+
+Ask audience to share what they called their files. 
+
+**Poll:** Using an explorer browser (finder on Mac, Explorer on Windows) who can find their file?
+
+:::
+
+## File locations and names
+
+Modern devices (including most Apple products) automatically store files and make them available as "Recent documents". 
+
+Result: we don't need to think about where our files are going. 
+
+\
+
+In bioinformatics we need to think about where our files are *at all times*. 
+
+
+## Projects 
+
+RStudio uses "Projects" to manage files. 
+
+Use one project per topic: 
+
+- This workshop should be one project. 
+
+- An assignment for a paper would be one project. 
+
+- A thesis, dissertation, or book would be one project.
+
+::: {.notes}
+
+In the next section we will demonstrate how to set up a project. 
+
+:::
+
+## Projects cont: what is a project?
+
+Projects keep your work together and organised.
+
+Each project is self-contained and portable.
+
+Sets your working directory and controls file paths.
+
+\
+
+**Practically:** a project is a single directory with a .Rproj file that manages how RStudio interacts with other files you are working with.
+
+::: {.notes}
+
+Practically, a project is a way to automate most of the work involved in saving files in the right place, and making sure we can access files. We will see later that when you want to import data into RStudio we need to tell RStudio where the file is found, and we need to use very clear and specific language when we do that. Projects will make this process much easier. 
+
+An analogy would be to say we are dedicating a single box or drawer in our desk to a topic. Every time I find something, or make something, that relates to my topic it goes in the one drawer, AND, I have a list of all the things that are in the drawer. 
+
+:::
+
+## Starting a Project in RStudio (Demonstration)
+
+*Watch while the instructor creates a new project.*
+
+File > New Project > New Directory > New Project
+
+Set Directory name to "intro_to_r". Create project as a subdirectory of ~/Documents.
+
+Select Create Project. 
+
+RStudio will re-start. 
+
+::: {.notes}
+
+For now, just watch the process and listen to the instructions. We will walk you through doing this as a group in the next slide. For now, just watch and listen. 
+
+Switch to RStudio, demonstrate setting up new project. 
+
+:::
+
+
+## It's your turn! {.slide-practical}
+
+### Start a new project
+
+- Set Directory name to "intro_to_r". 
+
+- Create project as a subdirectory of ~/Documents.
+
+- Look for the "intro_to_r.Rproj" file in the files Pane. 
+
+- Open a new Quarto document (File > New File), call it "Day 1" and *save* it as "day_1.qmd". 
+
+- RStudio *should* default to saving day_1.qmd to your project directory. 
+
+::: {.notes}
+
+Give students a 2-5 minute head start, checking in with the audience. Encourage people to discuss with others. Invite questions. 
+
+Walk through the process from start to finish, demonstrating the process. 
+
+**Reiterate:** "intro_to_r" is a folder that exists on our machine. We need to be able to find it, and from now on we will make sure we save everything relating to this project in here. If we have some raw data, we will put a copy in here, if we make some figures they will get saved to here. 
+
+:::
+
+## Customising RStudio
+
+RStudio has many user options.
+
+We will use Global Options to set 'soft wrap', the native pipe, and set an editor theme. 
+
+::: {.notes}
+Before doing Tools > Global options, ask that students do NOT follow, and only watch. Under Code, tick soft wrap and native pipe. Under appearance set an editor theme. Mention some examples of high-intensity (e.g., Gob) and gentle options (Chrome). 
+
+Then ask students to repeat what you did. This gives them an opportunity to explore the Global Options menu by memory and reinforces the process + the skill of finding buttons. 
+:::
+
 
 ## Follow me! 
 
@@ -86,48 +383,177 @@ Let's customise our RStudio interface
 
     - Gob is high intensity. 
 
-## Projects
 
-- Projects keep your work together and organised.
-- Each project is self-contained and portable.
-- Sets your working directory and controls file paths.
+## Project wrap-up
 
-- Practically: a project is a single directory with a .Rproj file that manages how RStudio interacts with other files you are working with.
+What questions do you have about projects? 
 
-## Starting a project
+::: {.notes}
 
-newProject image
+An opportunity for questions or discussion. 
 
-- Select New project
-- Give the project a short, descriptive name with no spaces (*e.g.,* frog_rna_seq)
+Note that from here we are about to pivot into actually working with RStudio and some example data. It's important to get these foundations set.
+
+:::
+
+## The bioinformatician's workflow
+
+Almost any project will include the following steps:
+
+- Import data
+
+- Exploratory analysis
+
+- Data wrangling
+
+- Visualisations and other outputs
+
+::: {.notes}
+
+R is a language. Most workshops, in my experience, focus on the basics. They explain that R uses functions to do stuff, objects for storing information, and then talk about all the different ways that we can store data and how exactly a function works. 
+
+In this workshop we are going to take a different approach and will dive straight into more complicated stuff. The idea is that you will learn the basics by doing. As an analogy, I'm learning French right now and we didn't start with liaisons. We started with some basic questions and answers, and the specific details like liaisons are thrown in as they come up. 
+
+Almost any project will contain four major steps: importing data, exploring the data, modifying or wrangling the data, and creating some finished product - often a visualisation. We will work through this basic format today. 
+:::
+
+
+
+## Importing data 
+
+R is primarily used for handling 'flat' data: rows and columns. 
+
+The most common type of flat data file is the CSV (comma separated values). 
+
+Typically, the first row will contain column names and is referred to as the "header". Rows underneath the header contain data for each column, with columns separated by commas. 
+
+# 
+
+![The csv format](csv_example.png)
+
+## Importing data: setting up
+
+First, store the data within a `/data` subdirectory.
+
+Second, install and load packages for importing data. 
+
+::: {.notes}
+Inform the audience that the installing, loading, and importing is how we will first look at two key features of R: functions and objects. Functions and objects are the two things we really need to understand in R, but rather than giving you some definitions we will jump into using them. 
+
+:::
+
+## It's your turn! {.smaller} 
+
+### Exercise: storing data
+
+- Go to https://tinyurl.com/penguinData2025. Use the download button to get a local copy of the file. 
+
+- In your `intro_to_r` project directory, create a subdirectory called `data`.
+
+- Copy/move the penguin_dataset.csv file to the new `data` directory. 
+
+- **Then:**
+
+- Open a new quarto document with the title "Intro to R Day 1". 
+
+- Save it as `day_1.qmd`
+
+- Type "## Setup" (this should appear as a heading). 
+
+- Type "### Packages"
+
+::: {.notes}
+
+It's critical to save keep everything in our project directory, and because it can get big and messy *very* quickly, we want to keep it organised with sub directories. 
+
+:::
+
+## Packages
+
+Packages are collections of additional data or functions that extend the R language. 
+
+We can equate packages with apps.
+
+To use a package requires two steps:
+
+- Install the package from a remote repository (one-time only)
+
+- Load the package into RStudio (every session)
+
+![Hex stickers](../img/hex_collection.jpg)
 
 ## It's your turn! {.slide-practical}
 
-### Exercise 1
+### Install and load the tidyverse
 
--   Create a new project called `R_intro` 
--   In a new folder/directory
--   Do not select `Create a git repository` or `Use renv` in the dialogue
--   Create sub-folders `data`, `analysis`, `plots`
-
-:::{.Large}
-```         
-R_intro
-  |-- data
-  |-- analysis
-  |-- plots
-  |-- R_intro.Rproj
+```{r}
+#: include: false
+library(tidyverse)
+library(palmerpenguins)
 ```
+
+Create a code block in your quarto doc, add the code below, and execute:
+
+```{r}
+#| eval: false
+#| echo: true
+
+# Install packages - run this once!
+install.packages("tidyverse")
+
+# Load packages - run this everytime!
+library(tidyverse)
+```
+
+Test this with (new code block): 
+```{r}
+#| echo: true
+
+tidyverse_packages()
+```
+
+::: {.notes}
+
+This may be the first time attendees see a function. Highlight the format of verb(target/argument - and sometimes empty). Be very clear that R is fussy, and will not tolerate spaces, capitals, misplaced commas or out-of-sync quotes and brackets. Functions do a *massive* range of things. 
+
+The tidyverse is a package that actually contains a whole lot of other packages. Installing and loading the tidyverse will give you access to example datasets and hundreds of new functions. Here we specifically want a function from the tidyverse for importing data. 
+
+Mention the use of hash symbols to comment out information. After running install tidyverse once, I'd then add a hash in front of it. 
 :::
 
-## Scripts
+## Importing data
 
-- Document every step of your work with scripts.
-- Quarto (.qmd) files provide a format for including code blocks and text.
-- Record your decisions and thought process as well as your code!
-- Note that Quarto files have a lot of extra functionality that we won't cover in this workshop.
+```{r}
+#| include: false
+#| eval: false
 
-images: File > New File > Quarto document > check Create Empty Document
+penguins <- read_csv(file = "~/OneDrive - University of Luxembourg/Training/r-intro/data/penguin_dataset.csv")
+```
+
+Our project dictates our current working directory. Files must be described *relative to the project directory*. 
+
+```{r}
+#| eval: false
+#| echo: true
+
+# The read_csv function: 
+read_csv(file = "data/penguin_dataset.csv")
+
+# Reading the data into an object:
+penguins <- read_csv(file = "data/penguin_dataset.csv")
+```
+
+
+::: {.notes}
+
+First, *don't* type this whole thing. Type "read_" then use the arrows to select read_csv(). 
+
+Second, we need to provide the **exact** file for the function. This is probably one of the most challenging parts of getting started with R. We need to understand that because we have set up a project, R is treating the project as our starting point. When specifying the file we should, after opening our quotes, type "da" and use tab-completion. Tab completion is critical for avoiding typos - learn to use it aggressively. 
+
+Note on the second line a special case: "<-" this means to take the data and store it inside an object.
+
+After running the second line, we should see something has appeared in our Environment tab. More on this in the next slides:
+:::
 
 ## Functions and objects
 
@@ -137,212 +563,93 @@ images: File > New File > Quarto document > check Create Empty Document
   - Count the number of times a name has appeared in a list.
   - Rename or reorganise columns (variables) in a file.
 
-
-
-## Objects
-
-Objects are how we store things (usually data) in R. Objects have two things: a name and some attached data.
-
-```{r}
-#| echo: true
-
-object5 <- 3 + 2
-
-object5
-```
-
-\
-
-```{r}
-#| echo: true
-
-object6 <- 12 - (2*3)
-
-object6
-```
-
-\
-
-```{r}
-#| echo: true
-
-object5 + object6
-```
-
-:::{.notes}
-We use the "<-" symbol to assign data to an object. 
-
-R also works as a calculator. If we type 3 + 2, we get 5 as a result.
-
-object5 + object6 shows that we can work directly with objects. 
-:::
-
-
-## Format of a function
-
-The format of a function is always "function_name" followed by a set of parenthesis. There is usually a target within the parenthesis. 
-
-```{r}
-#| echo: true
-
-sum(1,3,4)
-```
-
-Here, the function "sum" is adding together the values 1, 3, and 4. 
-
-## The value of objects
-
-Objects can be used to store complex data: 
-
-## Functions and objects
-
-Applying functions to objects, and storing the output of functions in objects, is how we use R.
-
-```{r}
-#| echo: true
-
-object11 <- sum(object5, object6)
-```
-
-\
-
-```{r}
-#| echo: true
-
-object11
-```
-
-
-## Loading the penguins data
-
-The `library()` function is loading palmerpenguins - a penguin dataset. 
-```{r}
-#| echo: true
-
-library(palmerpenguins)
-```
-
-The `head()` function shows us the start of the penguins object. 
-```{r}
-#| echo: true
-
-head(penguins)
-```
-
 ::: {.notes}
-There is also other information here on the screen - we cover this later but briefly, RStudio is showing us some metadata on our object:
+Objects as equivalent to files - we can see that we have this new object in our environment, and we can see that it contains information, in this case: data about penguins. 
 
-- A tibble is a type of object, more on that later. 
+If we want to do something with this data we need to use *functions*. 
 
-- The dimensions: 6 x 8. Six rows (`head()` shows the top six rows) and 8 columns (species, island, bill_length, bill_depth, flipper_length, and body_mass, plus two more columns (variables): sex and year). 
 :::
 
-## Arguments
 
-Arguments refine how functions work.
+## It's your turn! {.slide-practical}
 
-`function_name(target, extra_argument(s))`
+### Examine the penguins data object
 
-Examples:
-```{r}
-#| echo: true
+There are many functions we can use to examine our data. Test these functions and draw some initial conclusions about your data.
 
-round(100/3, 2)
-round(100/3, 5)
-```
-
-- This can be as *small* as changing the number of digits when using `round()`, or the number of rows returned by `head()`. 
-- They can be as significant as **changing the underlying method**, for example when using a function to adjust for multiple testing. 
-
-## Arguments cont.
-
-```{r}
-#| echo: true
-
-head(penguins, 3)
-```
- 
-What is significant about this?
-
-- Many functions *have defaults which are not shown to us* *e.g.,* the `head()` function defaults to 6 rows. 
-- This matters when a function has a default method or behaviour. 
-
-## Help!
-
-We can learn more about a function by typing a "?" in front of any function name.
 ```{r}
 #| echo: true
 #| eval: false
-
-?head()
+penguins |> head()
+penguins |> tail()
+penguins |> View()
+penguins |> summary()
+penguins |> colnames()
+penguins |> dim()
 ```
 
-\
+::: {.notes}
+This new symbol is called the pipe. You should be able to add it with `command`+`shift`+`m` (mac) or cntrl+shift+m (windwos). 
 
-A lot of information at first! 
+Two minutes to look at the penguins data, remind to draw conclusions. Then:
 
-- Description can be helpful.
-- Arguments explains what is required and shows what default arguments are in place. 
-- Often gives you some details to google/AI chat.
+First, note the format. With the exception of View(), all are lowercase, open a round-bracket or parentheses, then type the target. 
+Second, what is the pipe doing? 
+Third, going around the group, what does each function do?
+Fourth, what can we say about our data? 
 
-## Micro break exercise
+:::
 
-What have we learned so far? 
+## A small note on functions
 
-- R and RStudio, R and the tidyverse
-
-- Organise with Projects and Scripts
-
-- Functions do things
-
-- Objects store information
-
-- Arguments refine functions
-
-- `?function_name()`
-
-## The pipe
-
-The pipe is a new way to work with functions. Using the pipe will make your code cleaner and easier to read. 
-
-To use the pipe we will load the tidyverse library, which is a collection of many packages. 
-
-#
+We just saw the `head()` function. `head()` and `tail()` print the first, or last, six rows of the object. 
 
 ```{r}
 #| echo: true
 
-library(tidyverse)     # old format
-
-penguins %>% head()    # new format
+head(penguins, 4)
 ```
 
+- Functions can be modified with arguments. 
 
-## The pipe cont.
+- Most functions have *defaults* which are **not shown**. Be aware of function defaults!
 
-What's changed? Instead of naming the function and supplying the target, we now start with data and then supply the function.
+## The pipe 
 
-\
-
-Why? This format makes your code much easier to read, especially when you need to do a more complex task.
-
-\
-
-This works best if you read "%>%" as "and then..."
-
-## The pipe cont.
+This works best if you read "|>" as "and then..."
 
 ```{r}
 #| echo: true
 
-penguins %>% # Start with the penguin data AND THEN
-  na.omit() %>% # Remove the NAs AND THEN
-  arrange(bill_length_mm) %>% # Arrange (sort) the rows AND THEN
+penguins |> # Start with the penguin data AND THEN
+  na.omit() |> # Remove the NAs AND THEN
+  arrange(bill_length_mm) |>  # Arrange (sort) the rows AND THEN
   head() # Keep just the head (top 6 rows)
 ```
 
 With the pipe we can "chain" together functions to achieve complex tasks. Notice how it is still (mostly) readable.
 
+
+::: {.notes}
+
+This is generally what we want our code to be. It's human readable, there is documentation, this block of code is doing one thing. Note the format, the indents, and the use of one function per line. 
+
+:::
+
+
+## Write good code
+
+What is good code? 
+
+- Strict 'style': spaces around operators and commas.
+
+- Objects are named in lowercase and numbers, and use `_` to separate. 
+
+- One function per line (generally).
+
+- Pipes are at the end of a line and are preceded by spaces. After a pipe, indent (automatic).
+
+- Add comments! Document your work.
 
 
 
@@ -355,171 +662,284 @@ RStudio will (very) regularly provide you with two types of feedback:
   - Initially you will make many spelling and typing errors - R is very fussy!
   - Alternatively, find a new approach.
 
-#  
+## Warnings  
+
 - Warnings, which tell *something has happened and you should be aware of it*. 
   - There is a new version of the software you are using.
   - Two packages you are using may contradict one another.
   - NAs were removed or ignored when performing a function. 
   
 
+## It's your turn! {.slide-practical}
 
+### Interpreting errors and warnings
 
-## Packages (briefly)
+Run the following functions and identify what the problem is and what you need to do to fix it.
 
-One of the most powerful features of R is the ability to install and load packages.
-
-Packages have been designed to accomplish specific tasks. We can equate packages with apps. 
-
-Packages will often include a series of new functions and an example dataset. 
-
-Some packages will introduce functions that have the same name. If this is the case you will receive a warning message and be prompted to use the full name of the function in this format: `package::functionName()`
-
-# 
 ```{r}
 #| echo: true
+#| eval: false
 
-penguins %>% head() %>% arrange(bill_length_mm)
-
-penguins %>% head() %>% dplyr::arrange(bill_length_mm)
+library(heatmap)
+penguins2 <- read_csv(file = "penguins_dataset.csv")
+penguins |> mean(flipper_len)
+my_variable <- 0983
+my_varıable
 ```
+
 
 ::: {.notes}
-These two lines of code are doing the same thing. You probably won't encounter this while you are getting started, but if you do come across this format, you can recognise it. 
+Note you don't have to fix it, just understand what the message is telling you and theoretically what you need to do to fix it. 
+
+Sometimes errors are almost incomprehensible. But, they give you something to google. Some errors are complex enough that LLMs will send you in completely the wrong direction, but if you know more about R you can provide enough context that you'll be able to solve it.
 :::
 
-## Data structures
+## Exploratory analysis
 
-R is 'data aware'. That is to say that objects are different depending on whether they are a series of numbers (*e.g.,* 1, 3, 6, 7, 2), a series of characters (*e.g.,* "One", "Three", "Six", "Seven", "Two"), or something more complex like a matrix or list. 
+What do you do when you get new data? 
 
-We will look at some of the common data structures.
+Need to understand the format, shape, type.
+
+Are numerical values normally distributed? Are there outliers? Do we have batch effects?
+
+## Exploring the penguins dataset
+
+Use the `glimpse()` function to look at the penguins dataset.
+
+What are the data types of each column? Which are categorical, which are numeric?
+
+Use the `count()` function on one of the categorical variables. 
+
+## Beyond numbers and words
+
+"Far better an approximate answer to the right question, which is often vague, than an exact answer to the wrong question..." 
+
+          - John Tukey
+          
+"The simple graph has brought more information to the data analyst's mind than any other device. *It specializes in providing indications of unexpected phenomena*". 
+
+          - John Tukey
+          
+::: {.notes}
+Two quotes. First, a quote on what we are trying to achieve with this section. We want to sketch rough graphs that address very specific, very simple questions. If I squint at the data, can I see groups? Does that sample look like an outlier? Does something 'feel off', which sounds not very scientific but it's a place to start. 
+
+Second quote, people often quote the first sentence that the graph brings more information, but I rarely see the second part, which highlights the graph shows us unexpected things. In the course of your career you will, on many occasions, think your data is X and then a graph shows you it's actually Y (or X + something unknown). 
 
 
-## Data structures - vectors
-
-Vectors are one-dimensional strings of data that are all of the same type. 
-
-```{r}
-#| echo: true
-
-
-numeric_vector <- c(1,3,4,72)
-character_vector <- c("This","is","a","vector","with","a","length","of","nine")
-short_character_vector <- c("This is a character vector too, but it's much shorter!")
-misleading_character_vector <- c("1","3","89","2", "11")
-```
-
-
-
-## It's your turn! {.smaller}
-
-### Exercise 2
-
--   Create the four vectors below. Copy them exactly! 
--   Use the `class()` and `length()` functions to get information about the vectors. 
--   Test the `sort()` function on "numeric_vector" and "misleading_character_vector". 
--   What is going wrong with sort here?
-
-\
-
-:::{.Large}
-```         
-numeric_vector <- c(1,3,4,72)
-
-character_vector <- c("This","is","a","vector","with","a","length","of","nine")
-
-short_character_vector <- c("This is a character vector too, but it's much shorter!")
-
-misleading_character_vector <- c("1","3","89","2","11")
-```
+For the rest of the section we are going to use very basic plots to explore our data. We will re-visit plots on our third day and really focus on how to get good quality plots that we can be proud of. 
 :::
 
-## Understanding vector types
-
-```{r}
-#| echo: true
-
-numeric_vector %>% sum()
-character_vector %>% length()
-short_character_vector %>% length()
-misleading_character_vector %>% sort()
-```
-
-## Data structures - matrices
-
-A matrix is a 2D version of a vector. 
-
-```{r}
-#| echo: true
-
-plain_matrix <- matrix(1:12, nrow = 4, ncol = 3)
-
-plain_matrix
-```
+## Data visualisation with ggplot 
 
 \
 
-This matrix has no information about the variables (column names) or observations (row names). 
+- ggplot ("Grammar of Graphics"): work iteratively, build complexity. 
 
-## Data structures - data frames
+- Focus on the format.
 
-A data frame is made up of vectors (columns) which must be of the same length. Importantly, each vector can be of a *different* type. This means we can store complex information (sample names as characters, measurements as numerics *etc.,*).
+- Demonstrates a key loop in data analysis: visualise your data, make adjustments, transform the data and visualise again. 
+
+
+## The ggplot format
+
+The ggplot format has **three parts**:
+
+Calling the *ggplot function and specifying the data*.
+
+*Mapping* the data: what data is displayed on the x and y axis.
+
+*Plotting the data* with a geom function - there are different geoms for different types of plots. 
+
+  - Note that the geom is a new function, which means we need to add a "+" to the previous line.
+
+## The ggplot format 
+
 ```{r}
+#| eval: false
 #| echo: true
-results <- data.frame(
-  sample = c("sample_A1","sample_A2","sample_B1","sample_B2"),
-  measurement = c(8.2, 7.9, 6.7, 6.6),
-  response = c(TRUE, TRUE, FALSE, TRUE)
-)
 
-results
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  geom_point()
 ```
 
-## Data structures - tibbles
+**Exercise:** What do you notice about the format of this code?
 
-Tibbles are a specific and updated version of data frames designed for the tidyverse. 
+- No pipes, instead objects and arguments are all inside the function bracket.
 
-\
+- The "+" and/or there are two functions. 
 
-From the tibble overview page:
+- Comparing bill length and depth. 
 
-\
+- The format: indents, alignment, it's very readable.
 
-  "Tibbles are data.frames that are lazy and surly: they do less and complain more. This forces you to confront problems earlier, leading to cleaner, more expressive code."
+::: {.notes}
+Exercise/Discussion: What do you notice about the format of this code? 
+1. No pipes, instead objects and arguments are all inside the function bracket.
+2. The "+" and/or there are two functions. 
+3. Comparing bill length and depth. 
+4. The format: indents, alignment, it's very readable. 
+
+:::
+
+## The ggplot format
+
+```{r}
+#| echo: false
+
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  geom_point()
+```
+
+**Exercise:** Interpret this graph, discuss your observations.
+
+:::{.notes}
+This is a nice plot for four lines of code. Automatically set the scale and the axis labels are functional if ugly. 
+
+Made the plot. Now what? What's the first thing we should do? 
+
+Whatever we are visualising we should *always* ask ourselves whether the data makes sense. What do we observe? Does it fit with our expectations and knowledge of the data?
+
+Do I expect bill length and depth to be correlated? Yes, broadly. 
+
+What else do you see? 
+
+Are there sub-groups? How many? What could be the cause? We will address this question shortly.
+
+:::
+
+
+## It's your turn! {.slide-practical}
+
+### Exercise: clear your screen of previous code
+
+- From memory, create a new plot using:
+
+  - `ggplot()`, where **data = penguins** and 
+
+  - **mapping = aes()** with: 
+  
+    - flipper_length_mm on the x axis, body_mass_g on the y axis
+    
+  - geom_point()
+  
+  - Remember that after the `ggplot()` function add a "+" before `geom_point()`
+
+## Solution
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = penguins,
+       mapping = aes(x = flipper_length_mm,
+                     y = body_mass_g)) +
+  geom_point()
+```
+
+## What variable could explain the groups in this graph? 
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+ggplot(data = penguins, 
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm)) +
+  geom_point()
+```
+
+How do we address this question? 
+
+## Mapping additional variables
+
+*mapping = aes()* is used to map a variable to an axis. 
+
+Variables can also be mapped to axes other than x and y:
+
+*Colour*, *size*, and *shape* are all axes we can map aesthetics to. 
+
+
+## Mapping additional variables
+
+```{r}
+#| echo: true
+#| eval: false
+#| fig-align: center
+
+ggplot(data = penguins,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = sex)) +
+  geom_point()
+```
 
 # 
 
 ```{r}
-#| echo: true
+#| echo: false
+#| eval: true
+#| fig-align: center
 
-results_tbl <- tibble(
-  sample = c("sample_A1","sample_A2","sample_B1","sample_B2"),
-  measurement = c(8.2, 7.9, 6.7, 6.6),
-  response = c(TRUE, TRUE, FALSE, TRUE)
-)
+ggplot(data = penguins,
+       mapping = aes(x = bill_length_mm,
+                     y = bill_depth_mm,
+                     colour = sex)) +
+  geom_point()
 ```
 
-\
+## It's your turn! {.slide-practical}
 
-```{r}
-#| echo: true
+### Exercise: Explain the sub-grouping
 
-results_tbl
-```
+Using ggplot and mapping variables to colour, identify which of the categorical variables in penguins best explains the sub-grouping we observe in bill depth vs length.
+
+Hints: 
+
+- `glimpse()` and `summary()` are useful functions for looking at your data.
+
+- Even if you have found a variable that *looks* like it explains your data, did you check whether other variables **also** look like they explain the data? 
 
 
-## Summary {.smaller}
+## Hypothesis: You cannot imagine a plot that can't be made with ggplot {.smaller}
 
-In this session we have:
+**Challenge:** I challenge you to clearly describe a plot or visualization that cannot be created in ggplot. There is a prize available.
+
+Conditions: 
+
+- You must be able to describe this clearly, to the point where we as a group all agree on what you are requesting. 
+
+- This must be a plausible static visualization (*i.e.,* no 3-dimensional, sound-producing scifi graph).
+
+- You must give us your description by the end of Day 2 at the latest, and you must give us your description as soon as you come up with it. 
+
+- No LLMs. 
+
+- If, by the end of our final day, I haven't been able to build OR find a plot that represents data as per your description, you win. 
+
+
+## Summary
 
 - Introduced R, the tidyverse dialect, and RStudio. 
+
 - Started a new project for easy file management.
+
 - Learned to work in scripts for storing data. 
+
 - Introduced functions.
+
 - Created new objects.
+
+- Imported data. 
+
 - Looked at arguments, and default arguments.
+
 - Introduced the pipe for clear and readable code.
+
 - Covered errors and warnings.
-- Introduced data structures: 
-  - Vectors and Matrices
-  - Data frames
-  - Tibbles (lazy and surly, forcing you to write better code)
+
+- Introduced basic ggplot for exploratory analysis.
+

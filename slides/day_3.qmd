@@ -13,40 +13,28 @@ format:
 
 ---
 
+
+
 ## Introduction
 
 In this session we will learn how to visualise data using the ggplot2 package.
-
-We will also cover importing data from common file types and viewing our data.
 
 Importing, data wrangling, and data visualisation constitute a large part of the work you will do in bioinformatics. Today's session will be a 'full workflow'. 
 
 ## Learning Objectives
 
 - Learn how to import data in R with the readr package.
-- Be aware of other data types and functions associated with importing them.
 - Visualise data with ggplot2.
 - Become familiar with the `ggplot()` function format.
+- Use a range of geoms to plot different types of data.
 - Practice writing tidy code.
 - Practice key skills from day 1 and day 2. 
 
 
-## Flat data
-
-"Flat" data is two dimensional: rows and columns. 
-
-The most common type of flat data file is the CSV (comma separated values). 
-
-Typically, the first row will contain column names and is referred to as the "header". Rows underneath the header contain data for each column, with columns separated by commas. 
-
-# 
-
-
-![The csv format](csv_example.png)
 
 
 
-## Importing with readr
+## Importing with readr {.smaller}
 
 The readr package is part of the tidyverse.
 
@@ -61,37 +49,8 @@ library(tidyverse)
 penguin_data <- read_csv("../data/penguin_dataset.csv")
 ```
 
-## It's your turn! {.slide-practical}
 
 
-
-When loading a new dataset we should view (a subset of) the data to familiarise ourselves. 
-
-### Exercise 1
-
-Use the following functions to view the penguin_data object. What is each function doing?
-
-`head()`, `tail()`, `glimpse()` 
-
-`class()`, `str()`, `summary()`
-
-#
-
-Three functions (`class()`, `str()`, and `summary()`) show important details about the object.
-
-`class()` shows the class attribute (*e.g.,* matrix, vector, tibble).
-
-`str()` shows the internal structure of the object. 
-
-We see part of each column (displayed as a row, similar to `glimpse()`) and information about the type of data stored in each column.
-
-# {.smaller}
-
-```{r}
-#| echo: true
-
-penguin_data %>% summary()
-```
 `summary()` evaluates each column and returns a summary depending on the type of data. For columns of numeric data we see mean, median, min, max and quartile information. 
 For character columns we see the length, and for logical columns we get a count of the number of TRUE and FALSE calls. 
 
@@ -100,9 +59,13 @@ For character columns we see the length, and for logical columns we get a count 
 
 
 
-## Importing ugly data
+## Importing ugly data {.smaller}
 
 We will often encounter data that does not match our expectations for clean and tidy column names. 
+
+Go to https://tinyurl.com/uglyDuckling2025 and use the download button to download this example dataset. 
+
+Store it in your `/data` directory. 
 
 \
 
@@ -111,7 +74,7 @@ We will often encounter data that does not match our expectations for clean and 
 
 
 uglyDuckling_data <- read_csv("../data/uglyDuckling_dataset.csv")
-uglyDuckling_data %>% colnames()
+uglyDuckling_data |> colnames()
 ```
 
 \
@@ -123,7 +86,7 @@ snake_case, camelCase, **and** spaces??? Who made this object!?
 ```{r}
 #| echo: true
 #| 
-ugly_duckling_data <- uglyDuckling_data %>% rename(
+ugly_duckling_data <- uglyDuckling_data |> rename(
   species = "Species",
   bill_length_mm = "billLengthMM",
   flipper_length_mm = "Flipper_length_mm",
@@ -131,21 +94,30 @@ ugly_duckling_data <- uglyDuckling_data %>% rename(
   year = "Year"
 )
 
-ugly_duckling_data %>% colnames()
+ugly_duckling_data |> colnames()
 ```
 
 ## What if I had a lot of columns?
 
 ```{r}
 #| echo: true
+#| eval: false
 
-renv::install("janitor")
+install.packages("janitor")
+```
+
+
+```{r}
+#| echo: true
+#| eval: false
 library(janitor)
 
-uglyDuckling_data %>% janitor::clean_names()
+uglyDuckling_data |> janitor::clean_names()
 ```
 
 The [janitor](https://sfirke.github.io/janitor/) R package has a lot of useful tools for cleaning data. 
+
+Remember, there are functions and packages for *so many* tasks. Search for existing packages to make your tasks easier.
 
 ::: {.notes}
 
@@ -190,61 +162,9 @@ Calling the *ggplot function and specifying the data*.
 
   - Note that the geom is a new function, which means we need to add a "+" to the previous line.
 
-## The ggplot format 
-
-```{r}
-#| eval: false
-#| echo: true
-
-ggplot(data = penguin_data, 
-       mapping = aes(x = bill_length_mm,
-                     y = bill_depth_mm)) +
-  geom_point()
-```
 
 
 ## The ggplot format
-
-```{r}
-#| echo: false
-
-ggplot(data = penguin_data, 
-       mapping = aes(x = bill_length_mm,
-                     y = bill_depth_mm)) +
-  geom_point()
-```
-
-:::{.notes}
-Made the plot. Now what? What's the first thing we should do? 
-
-Whatever we are visualising we should *always* ask ourselves whether the data makes sense. What do we observe? Does it fit with our expectations and knowledge of the data?
-
-Do I expect bill length and depth to be correlated? Yes, broadly. 
-
-What else do you see? 
-
-Two, or three, groups: we already saw that there is a variable for island, and a variable for sex. 
-
-:::
-
-
-## It's your turn! {.slide-practical}
-
-### Exercise 2: clear your screen of previous code
-
-- From memory, create a new plot using
-
-  - `ggplot()`, where **data = penguin_data** and 
-
-  - **mapping = aes()** with: 
-  
-    - flipper_length_mm on the x axis, body_mass_g on the y axis
-    
-  - geom_point()
-  
-  - Remember that after the `ggplot()` function add a "+" before `geom_point()`
-
-## Solution
 
 ```{r}
 #| echo: true
@@ -304,22 +224,7 @@ ggplot(data = penguin_data,
   geom_point()
 ```
 
-## Does sex, island or species explain the grouping in our bill dimension dataset? 
 
-```{r}
-#| fig-align: center
-
-ggplot(data = penguin_data,
-       mapping = aes(x = bill_length_mm,
-                     y = bill_depth_mm)) +
-  labs(title = "Bill length and depth in penguins",
-       x = "Bill length (mm)",
-       y = "Bill depth (mm)") +
-  theme_minimal() +
-  geom_point()
-```
-
-- How do we address this question? 
 
 ## Mapping additional variables
 
@@ -724,11 +629,16 @@ Two packages, patchwork and cowplot, provide the ability to combine plots.
 
 ```{r}
 #| echo: true
+#| eval: false
+install.packages("patchwork")
+```
 
-renv::install("patchwork")
+```{r}
+#| echo: true
 
 library(patchwork)
 ```
+
 
 ## patchwork requires stored plots
 
@@ -776,7 +686,7 @@ p1 / p2
 
 
 
-## Adding trendlines (an aside) ((Not sure where this fits - an exercise??))
+## Adding trendlines (an aside)
 
 ```{r}
 #| echo: true
@@ -791,7 +701,7 @@ p_bm_fl +
     colour = "darkgrey")
 ```
 
-#
+# Adding trendlines
 
 ```{r}
 #| echo: true
@@ -808,4 +718,483 @@ p_bm_fl +
 ```
 
 
+## Visualising correlation with `geom_tile()`
 
+Heatmaps are a useful way to visualise values across two dimensions using colour. Examples from biology are expression values for a given set of genes across samples. 
+
+This is often combined with clustering (*e.g.,* unsupervised clustering with k-means) to identify patterns which differ between groups. 
+
+Here we will create a simple supervised tile heatmap.
+
+## Generating some example data {.smaller}
+
+Here we will generate some example data showing some value (counts, words written, tasks completed *etc.,*) per day for five weeks.
+
+```{r}
+#| echo: true
+
+set.seed(0982)
+month_data <- tibble(
+  date = seq(as.Date("2024-12-01"), 
+              as.Date("2024-12-31"), 
+              by = "day"),
+  count = sample(1:20, 31, replace = TRUE)  # Random counts per day
+) |>
+  mutate(
+    wday = wday(date, label = TRUE, abbr = TRUE),  # Day of the week (Sun-Sat)
+    week = (day(date) - 1) %/% 7 + 1  # Week number (1 to 5)
+  )
+
+month_data |> head()  
+```
+
+## Starting with `geom_tile()` {.smaller}
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = month_data,
+       mapping = aes(x = week, 
+                      y = wday, 
+                      fill = count)) +
+  geom_tile()
+```
+
+What are the issues with this plot? 
+
+
+## Improving `geom_tile()`
+
+We need to: 
+
+- Change the x and y axis (putting days the y).
+
+- Invert the order of days (use the `scale_y_reverse()` function).
+
+- Use `labs()` to add a title, axis labels and rename the fill (legend) variable. 
+
+- Additionally, adding colour = "white" as an argument for `geom_tile()` will add separation between grid points. 
+
+## Solution
+
+```{r}
+#| echo: true
+#| eval: false
+
+ggplot(data = month_data,
+       mapping = aes(x = wday,
+                     y = week,
+                     fill = count)) +
+  geom_tile(colour = "white") +
+  scale_y_reverse() +
+  theme_classic() + # removes background gridlines
+  labs(title = "December 2024 Calendar Heatmap",
+       x = "Week",
+       y = "Day of the week",
+       fill = "Count")
+```
+
+## Solution
+
+```{r}
+#| echo: false
+#| eval: true
+
+ggplot(data = month_data,
+       mapping = aes(x = wday,
+                     y = week,
+                     fill = count)) +
+  geom_tile(colour = "white") +
+  scale_y_reverse() +
+  theme_classic() +
+  labs(title = "December 2024 Calendar Heatmap",
+       x = "Week",
+       y = "Day of the week",
+       fill = "Count")
+```
+
+## Visualising change over time (line plots)
+
+```{r}
+#| echo: true
+
+set.seed(02) # Please set this seed for this example
+
+# Create stock price data for three different stocks
+dates <- seq.Date(from = as.Date("2024-01-01"), 
+                  by = "week", 
+                  length.out = 200)
+
+stocks <- tibble(
+  date = rep(dates, times = 3),
+  stock = rep(c("Stock A", "Stock B", "Stock C"), each = length(dates)),
+  price = c(
+    100 + cumsum(rnorm(length(dates), mean = 0, sd = 5)),  # Stock A fluctuates around 100
+    80 + cumsum(rnorm(length(dates), mean = 0, sd = 4)),   # Stock B fluctuates around 80
+    120 + cumsum(rnorm(length(dates), mean = 0, sd = 6))   # Stock C fluctuates around 120
+  )
+)
+```
+
+## Line chart with `geom_line()`
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(stocks %>% filter(stock == "Stock C"), 
+        aes(x = date, 
+            y = price)) +
+  geom_line() +
+  labs(title = "Stock C Price Over Time", 
+        x = "Date", 
+        y = "Price") +
+  theme_minimal()
+```
+
+## Combining `geom_line()` and `geom_fill()` {.smaller}
+
+`geom_area()` adds a filled or shaded area. The plot looks much less empty.
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(stocks %>% filter(stock == "Stock B"), 
+        aes(x = date, y = price)) +
+  geom_area(fill = "black", 
+            alpha = 0.4) +
+  geom_line(color = "black", 
+            linewidth = 0.5) +  # Keeps the line for clarity
+  labs(title = "Stock B Price Over Time (Area Chart)", 
+        x = "Date", 
+        y = "Price") +
+  theme_minimal()
+```
+
+## A popular option: the stacked area chart
+
+Look at this example from an excellent data visualiser [Cédric Scherer:](https://www.cedricscherer.com/tags/ggplot2/):
+
+  ![](../img/day_3/CedricScherer_stackedAreaPlot.png)
+  
+  
+## Creating a stacked area chart
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(stocks, aes(x = date, 
+                    y = price, 
+                    fill = stock)) +
+  geom_area(alpha = 0.6) +  # Fill areas with transparency
+  labs(title = "Stacked Area Chart of Stock Prices Over Time",
+       x = "Date", 
+       y = "Price", 
+       fill = "Stock") +
+  theme_minimal()
+```
+
+## Critically analysing our stocks {.smaller}
+
+```{r}
+#| echo: false
+#| fig-align: center
+
+ggplot(stocks, aes(x = date, 
+                    y = price, 
+                    fill = stock)) +
+  geom_area(alpha = 0.6) +  # Fill areas with transparency
+  labs(title = "Stacked Area Chart of Stock Prices Over Time",
+       x = "Date", 
+       y = "Price", 
+       fill = "Stock") +
+  theme_minimal()
+```
+
+What is happening with our stock values?
+
+- Stock B and C are increasing over time. However, Stock A is not changing. 
+
+- It is difficult to accurately estimate Stock A's change in value over time because of the stacked nature of the plot. 
+
+- We recommend you do not use stacked area plots, despite their popularity.
+
+## Recommended break time
+
+The remainder of this workshop is a walkthrough of a real data visualisation. 
+
+## Start to finish visualisation with tidytuesday
+
+[tidytuesday](https://github.com/rfordatascience/tidytuesday) is a community initiative that publishes a weekly dataset in an easy-to-access format. Each week, people create a visualisation using the shared dataset and publish it on social media. 
+
+In 2024, tidytuesday had the aim of being featured in 10+ training courses. They hit more than 30!
+
+In this section we will walk through a real data visualisation: importing the data from an online repo, carrying out exploratory analysis, data wrangling, visualisation, more data wrangling, and a final visualisation.
+
+## Import the tidytuesday data and exploratory analysis
+
+```{r}
+#| echo: true
+
+
+parfumo_data_clean <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2024/2024-12-10/parfumo_data_clean.csv')
+```
+
+## Exploratory analysis
+
+Use functions we have covered in this workshop to explore the data. Note down your initial conclusions and impressions. 
+
+Specifically: 
+
+- What are five things you notice about the data?
+
+- What is one question you have about the data?
+
+- What is something you might want to investigate, visualise or learn about? 
+
+## Exploratory analysis initial conclusions {.smaller}
+
+- The data has a lot of NAs. Concentration is almost 80% NA, Rating_Count is almost 50% NA.
+
+- There is a mix of nmeric and character data.
+
+- Rating_Value looks like it's a 0-10 scale, with a mean and median around 7.3 - 7.4
+
+- The mean and median of Rating_Count vary significantly: median of 19 and a mean of 60.
+
+- The basic structure: perfume name, brand, then values and descriptions. 
+
+- *Questions and assumptions*: I assume Rating_Value is an average, with Rating_Count describing how many Ratings contributed to this value.
+
+## Brand, Rating_Value, and Rating_Count
+
+*Aim:* generate a visualisation which will show which brands consistently have high ratings for their different products, with the intention that a person with little to no knowledge about perfume (like myself) can get an idea of reliable brands.
+
+\
+
+**Exercise:** Mentally visualise what this figure might look like. What are the key components we will need to convey?
+
+## Assessing the means {.smaller}
+
+```{r}
+#| echo: true
+
+parfumo_data_clean |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE)) |> 
+  arrange(desc(avg_Rating)) |> 
+  head()
+```
+
+\
+
+Does this mean Natura and Sarahs Creations are the best choice? Why?
+
+- Does `summary()` change your opinion?
+
+## Hypothesis
+
+Hypothesis: some brands have very high average ratings but this is an artifact due to low sampling numbers. 
+
+*i.e.,* Brands with more ratings are (unfairly) penalised as their average ratings are pulled downwards by individual preferences. Natura and Sarahs Creations were possibly rated by 1 - 2 people who scored the perfumes with 10s. 
+
+- How can we test this hypothesis with a visualisation? 
+
+## Perfumes with fewer ratings have high variation in rating value {.smaller}
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = parfumo_data_clean, 
+      mapping = aes(x = Rating_Count, 
+                    y = Rating_Value)) +
+  geom_point()
+```
+
+- Comment on the fact that there are no perfumes with more than 1000 ratings and a rating of less than 5. What could cause this? 
+
+## An aside: being aware of other relationships {.smaller}
+
+*Hypothesis:* There will be a significant relationship between Rating_Count and Release_Year.
+
+```{r}
+#| echo: true
+#| fig-align: center
+#| warnings: false
+
+ggplot(data = parfumo_data_clean, 
+        mapping = aes(x = Release_Year, y = Rating_Count)) +
+  geom_point()
+```
+
+- This is important because if we are filtering based on a Rating_Count threshold, we need to be aware this is reducing the likelihood of older Brands appearing.
+
+- *note*: I have suppressed the warnings about NAs, and will continue to do so for all future plots. 
+
+## Ready to wrangle {.smaller}
+
+At this point I have performed a basic exploratory analysis. I believe I understand the basics of my data and I'm ready to begin data wrangling.
+
+For each of the data wrangling steps we will discuss the logic.
+
+**Data wrangling steps**
+
+- *Filtering for low rating counts:* Perfumes that were rated fewer than 19 times (the median number of ratings) were removed from the data. Having a small number of ratings can skew the rating result (e.g., a single 10/10 is not representative of the perfumes quality).
+
+- *Calculate the average rating by brand and the number of perfumes per brand:* Perfumes were grouped by brand, and the average (mean) rating for each brand was calculated. Some brands had only a small number of perfumes, which led to skewed averages.
+
+## Data wrangling cont. {.smaller}
+
+- *Remove brands with a small number of perfumes:* Brands with fewer than 20 perfumes were removed from the analysis.
+
+- *Store the perfume_brand_data object:* A dataframe of 1635 rows, consisting of only perfumes that meet the above two criteria (individually rated more than 19 times, and from a brand with 20 or more perfumes).
+
+- *Create and store the brandRatingData object:* A dataframe of 20 rows and three variables, consisting of the 20 brands with the highest average rating (the mean rating across all perfumes for the brand), as well as the number of perfumes in each brand.
+
+## Explore the new objects
+
+```{r}
+#| echo: true
+
+perfume_brand_data <- read.csv('https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/perfume_brand_data.csv')
+
+brandRatingData <- read.csv('https://raw.githubusercontent.com/tylermcinnes/visualization_day/refs/heads/main/data/brandRatingData.csv')
+```
+
+## Explore the new objects
+
+```{r}
+#| echo: true
+
+perfume_brand_data |> head()
+
+perfume_brand_data |> colnames()
+```
+
+## Explore the new objects
+
+```{r}
+#| echo: true
+
+brandRatingData |> head()
+```
+
+
+## Building a visualisation - sketching
+
+```{r}
+#| echo: true
+#| fig-align: center
+
+ggplot(data = perfume_brand_data,
+       mapping = aes(x = Rating_Value, 
+                      y = Brand)) +
+  geom_boxplot()
+```
+
+## "Sketching" options
+
+ggplot allows us to make quick plots to visualise data. For a complex task, it's recommended to try different geoms and formats, experimenting with mappings to identify the clearest way to represent the data. 
+
+In this example I eventually discarded the boxplot. I could not see an easy way to represent the number of perfumes per brand, nor the number of ratings per perfume, and I felt this was important data. 
+
+## `geom_point` and the brand rating average
+
+```{r}
+#| echo: true
+#| eval: false
+#| fig-align: center
+
+ggplot(brandRatingData, 
+       aes(
+        x = avg_Rating,
+        y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(
+    size = number_Perfumes,
+    color = avg_Rating)) +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Mean perfume rating by brand"
+  ) 
+```
+
+## `geom_point` and the brand rating average
+
+```{r}
+#| echo: false
+#| eval: true
+#| fig-align: center
+
+ggplot(brandRatingData, 
+       aes(
+        x = avg_Rating,
+        y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(
+    size = number_Perfumes,
+    color = avg_Rating)) +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Mean perfume rating by brand"
+  ) 
+```
+
+## Refining the plot {.smaller}
+
+```{r}
+#| echo: true
+#| 
+brandRatingData <- parfumo_data_clean |> 
+  filter(Rating_Count >= 19 ) |> 
+  group_by(Brand) |> 
+  summarize(avg_Rating = mean(Rating_Value, na.rm = TRUE),
+            number_Perfumes = n(),
+            avg_rating_count = mean(Rating_Count)) |> 
+  filter(number_Perfumes >= 20) |> 
+  arrange(desc(avg_Rating)) |> 
+  head(n = 20)
+```
+
+Currently, colour is not being fully utilised - it is mapped to the Brand average rating, which is already shown via the x axis. Thinking back to earlier themes on number of ratings and number of perfumes per brand, we could use colour to represent some of our data around the rating_Count variable.
+
+To do this, we will re-build the brandRatingData object with an additional variable calculated by the summarize() function, calling it avg_rating_count and then map it to colour.
+
+## Refined
+
+```{r}
+ggplot(brandRatingData, 
+       aes(x = avg_Rating, y = reorder(Brand, avg_Rating))) +
+  geom_point(aes(size = number_Perfumes, color = avg_rating_count)) +
+  scale_size(range = c(1, 10), name = "Number of perfumes") +
+  labs(
+    x = "Brand rating",
+    y = "Brand",
+    title = "Top 20 Perfume Brands Ranked by Mean Rating"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(size = 10, color = "gray40"),
+    axis.title = element_text(size = 12, face = "bold", color = "gray50"),
+    plot.title = element_text(size = 14, face = "bold", hjust = 0.5, color = "gray50"),
+    legend.title = element_text(size = 12, face = "bold", color = "gray50"), 
+    legend.text = element_text(size = 10, color = "gray40")
+  ) 
+```
+
+
+## Summary
+
+ggplot has fine control over all elements of the plot window.
+
+Combine geoms, separate data with `facet()`, join figures with patchwork.
+
+ggplot facilitates exploratory data analysis with quick plots.
+
+dplyr verbs can manage majority of data wrangling.
+
+Plot, transform, plot with refined features.
